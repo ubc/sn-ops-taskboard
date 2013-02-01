@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+
+	<g2:evaluate>
+	</g2:evaluate>
+
+	<div xmlns="http://www.w3.org/1999/xhtml">
+		<table>
+			<thead>
+				<tr>
+					<th>Key</th>
+					<th>Value</th>
+				</tr>
+			</thead>
+			<tbody>
+				<j2:while test="$[table.next()]">
+					<tr>
+						<td>$[table.key()]</td>
+						<td>$[table.value()]</td>
+					</tr>
+				</j2:while>
+			</tbody>
+		</table>
+	</div>
+</j:jelly>
