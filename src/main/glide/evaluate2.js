@@ -3,7 +3,7 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 
 (function () {
 	"use strict";
-	var user, boards, incidents;
+	var user, boards, incidents, problems;
 
 	user = gs.getUser();
 
@@ -27,7 +27,7 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 			'Active': 'wip' // DEMO INSTANCE ONLY
 		};
 
-		function loadIncidents() {
+		function loadTasks() {
 			var incidentRecords, task, taskboard;
 
 			incidentRecords = new GlideRecord('incident');
@@ -60,7 +60,59 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 		}
 
 		return {
-			loadTasks: loadIncidents
+			loadTasks: loadTasks
+		};
+	}());
+
+	problems = (function () {
+		var stateTaskboardMap;
+
+		stateTaskboardMap = {
+			'New': 'todo',
+			'Accepted': 'todo',
+			'Assigned': 'wip',
+			'Work in progress': 'wip',
+			'Pending Change': 'wip',
+			'Pending Schedule': 'wip',
+			'Pending Vendor': 'wip',
+			'Resolved': 'resolved',
+			'Open': 'wip' // DEMO INSTANCE ONLY
+		};
+
+		function loadTasks() {
+			var problemRecords, task, taskboard;
+
+			problemRecords = new GlideRecord('problem');
+			problemRecords.addActiveFilter();
+			// TODO: Filter for assignment group
+			problemRecords.query();
+
+			while (problemRecords.next()) {
+				task = {
+					link: problemRecords.getLink(),
+					number: problemRecords.number.toString(),
+					opened_at: problemRecords.opened_at.toString(),
+					assigned_to: problemRecords.assigned_to.getDisplayValue(),
+					assigned_to_link: problemRecords.assigned_to.getRefRecord().getLink(),
+					short_description: problemRecords.short_description.toString(),
+					priority: problemRecords.priority.getDisplayValue(),
+					state: problemRecords.state.getDisplayValue(),
+					taskboard_priority: computeTaskPriority(problemRecords)
+				};
+
+				taskboard = stateTaskboardMap[task.state];
+				if (taskboard === undefined) {
+					taskboard = 'todo';
+					task.short_description = '(unknown state ' + task.state + ') ' + task.short_description;
+				}
+				if (taskboard !== null) {
+					boards[taskboard].push(task);
+				}
+			}
+		}
+
+		return {
+			loadTasks: loadTasks
 		};
 	}());
 
@@ -142,6 +194,7 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 	}
 
 	incidents.loadTasks();
+	problems.loadTasks();
 
 	boards.todo.sort(taskPriorityComparator);
 	boards.wip.sort(taskPriorityComparator);
