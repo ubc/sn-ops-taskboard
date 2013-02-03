@@ -27,9 +27,11 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 					link: incidentRecords.getLink(),
 					number: incidentRecords.number.toString(),
 					opened_at: incidentRecords.opened_at.toString(),
-					assigned_to: incidentRecords.assigned_to.getRefRecord(),
-					assigned_to_link: incidentRecords.assigned_to.getLink(),
+					assigned_to: incidentRecords.assigned_to.getDisplayValue(),
+					assigned_to_link: incidentRecords.assigned_to.getRefRecord().getLink(),
 					short_description: incidentRecords.short_description.toString(),
+					priority: incidentRecords.priority.getDisplayValue(),
+					state: incidentRecords.state.getDisplayValue(),
 					taskboard_priority: computeTaskPriority(incidentRecords)
 				};
 

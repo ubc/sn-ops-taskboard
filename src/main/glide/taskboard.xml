@@ -13,7 +13,10 @@
 				<tr>
 					<th>Number</th>
 					<th>Description</th>
+					<th>Assigned to</th>
+					<th>State</th>
 					<th>Priority</th>
+					<th>Opened</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -21,7 +24,15 @@
 					<tr>
 						<td><a class="linked formlink" href="$[todoBoard.value().link]">$[todoBoard.value().number]</a></td>
 						<td>$[todoBoard.value().short_description]</td>
-						<td>$[todoBoard.value().taskboard_priority]</td>
+						<j2:if test="$[!!todoBoard.value().assigned_to]">
+							<td><a class="linked formlink" href="$[todoBoard.value().assigned_to_link]">$[todoBoard.value().assigned_to]</a></td>
+						</j2:if>
+						<j2:if test="$[!todoBoard.value().assigned_to]">
+							<td>&#xA0;</td>
+						</j2:if>
+						<td>$[todoBoard.value().state]</td>
+						<td>$[todoBoard.value().priority]</td>
+						<td>$[todoBoard.value().opened_at]</td>
 					</tr>
 				</j2:while>
 			</tbody>
