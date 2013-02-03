@@ -14,12 +14,25 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 	};
 
 	incidents = (function () {
+		var stateTaskboardMap;
+
+		stateTaskboardMap = {
+			'New': null,
+			'Accepted': 'todo',
+			'Assigned': 'wip',
+			'Work in progress': 'wip',
+			'Pending Change': 'wip',
+			'Pending Vendor': 'wip',
+			'Resolved': 'resolved',
+			'Active': 'wip' // DEMO INSTANCE ONLY
+		};
+
 		function loadIncidents() {
 			var incidentRecords, task, taskboard;
 
 			incidentRecords = new GlideRecord('incident');
 			incidentRecords.addActiveFilter();
-			incidentRecords.setLimit(10);
+			// TODO: Filter for assignment group
 			incidentRecords.query();
 
 			while (incidentRecords.next()) {
@@ -35,8 +48,14 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 					taskboard_priority: computeTaskPriority(incidentRecords)
 				};
 
-				//boards[taskboard].push(task);
-				boards.todo.push(task);
+				taskboard = stateTaskboardMap[task.state];
+				if (taskboard === undefined) {
+					taskboard = 'todo';
+					task.short_description = '(unknown state ' + task.state + ') ' + task.short_description;
+				}
+				if (taskboard !== null) {
+					boards[taskboard].push(task);
+				}
 			}
 		}
 
