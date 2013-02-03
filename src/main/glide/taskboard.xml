@@ -6,18 +6,20 @@
 	</g2:evaluate>
 
 	<div xmlns="http://www.w3.org/1999/xhtml">
+		<div>ok = $[ok]</div>
+
 		<table>
 			<thead>
 				<tr>
-					<th>Key</th>
-					<th>Value</th>
+					<th>Number</th>
+					<th>Description</th>
 				</tr>
 			</thead>
 			<tbody>
-				<j2:while test="$[table.next()]">
+				<j2:while test="$[todoBoard.next()]">
 					<tr>
-						<td>$[table.key()]</td>
-						<td>$[table.value()]</td>
+						<td><a class="linked formlink" href="$[todoBoard.value().link]">$[todoBoard.value().number]</a></td>
+						<td>$[todoBoard.value().short_description]</td>
 					</tr>
 				</j2:while>
 			</tbody>

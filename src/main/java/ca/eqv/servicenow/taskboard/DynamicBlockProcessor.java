@@ -30,7 +30,7 @@ public class DynamicBlockProcessor {
 		final NodeList evaluate2nodes = document.getElementsByTagName("g2:evaluate");
 		for (int ix = 0; ix < evaluate2nodes.getLength(); ix++) {
 			Node node = evaluate2nodes.item(ix);
-			if ("evaluate2".equals(node.getAttributes().getNamedItem("id").getNodeValue())) {
+			if (node.getAttributes().getNamedItem("id") != null && "evaluate2".equals(node.getAttributes().getNamedItem("id").getNodeValue())) {
 				node.setTextContent(evaluate2js);
 				node.getAttributes().removeNamedItem("id");
 			}
