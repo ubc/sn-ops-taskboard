@@ -1,5 +1,5 @@
 /*global gs, GlideRecord */
-var ok, table, todoBoard, wipBoard, resolvedBoard;
+var ok, todoBoard, wipBoard, resolvedBoard;
 
 (function () {
 	"use strict";
@@ -26,7 +26,9 @@ var ok, table, todoBoard, wipBoard, resolvedBoard;
 				task = {
 					link: incidentRecords.getLink(),
 					number: incidentRecords.number.toString(),
+					opened_at: incidentRecords.opened_at.toString(),
 					assigned_to: incidentRecords.assigned_to.getRefRecord(),
+					assigned_to_link: incidentRecords.assigned_to.getLink(),
 					short_description: incidentRecords.short_description.toString(),
 					taskboard_priority: computeTaskPriority(incidentRecords)
 				};
@@ -94,24 +96,39 @@ var ok, table, todoBoard, wipBoard, resolvedBoard;
 	}
 
 	function computeTaskPriority(taskRecord) {
-		var assignedToScore, priorityScore, openedAtDate, ageScore;
+		var assignedToScore, priorityScore, openedAtParsed, openedAtDate, ageScore;
 
-		assignedToScore = (taskRecord.assigned_to === user.getID()) ? 10000 : 0;
+		//noinspection JSLint
+		assignedToScore = taskRecord.assigned_to.toString() == user.getID().toString() ? 10000 : 0;
 
-		priorityScore = (4 - taskRecord.priority) * 1000;
+		priorityScore = (4 - taskRecord.priority.toString()) * 1000;
 
-		openedAtDate = new Date(taskRecord.opened_at.replace(' ', 'T'));
+		// Date.parse seems to produce NaN no matter what.
+		// Note that opened_at is actually in the caller's time zone. This can lead to scores that are off by up to one day.
+		openedAtParsed = taskRecord.opened_at.toString().match(/^(\d{4})-(\d{2})-(\d{2})\D(\d{2}):(\d{2}):(\d{2})/m);
+		if (openedAtParsed[6] !== undefined) {
+			openedAtDate = new Date(openedAtParsed[1], openedAtParsed[2] - 1, openedAtParsed[3], openedAtParsed[4], openedAtParsed[5], openedAtParsed[6]);
+		} else {
+			openedAtDate = new Date();
+		}
 		ageScore = (new Date().getTime() - openedAtDate.getTime()) / 86400000;
 
 		return assignedToScore + priorityScore + ageScore;
 	}
 
+	function taskPriorityComparator(a, b) {
+		return b.taskboard_priority - a.taskboard_priority;
+	}
+
 	incidents.loadTasks();
+
+	boards.todo.sort(taskPriorityComparator);
+	boards.wip.sort(taskPriorityComparator);
+	boards.resolved.sort(taskPriorityComparator);
 
 	todoBoard = makeIterableArray(boards.todo);
 	wipBoard = makeIterableArray(boards.wip);
 	resolvedBoard = makeIterableArray(boards.resolved);
 
-	table = makeIterableObject(boards.todo[0]);
 	ok = 1;
 }());

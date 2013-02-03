@@ -13,6 +13,7 @@
 				<tr>
 					<th>Number</th>
 					<th>Description</th>
+					<th>Priority</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -20,6 +21,7 @@
 					<tr>
 						<td><a class="linked formlink" href="$[todoBoard.value().link]">$[todoBoard.value().number]</a></td>
 						<td>$[todoBoard.value().short_description]</td>
+						<td>$[todoBoard.value().taskboard_priority]</td>
 					</tr>
 				</j2:while>
 			</tbody>
