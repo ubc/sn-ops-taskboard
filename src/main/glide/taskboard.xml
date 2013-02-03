@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
 
-	<g2:evaluate>
+	<g2:evaluate id="evaluate2">
+		<!-- evaluate2.js will be included here -->
 	</g2:evaluate>
 
 	<div xmlns="http://www.w3.org/1999/xhtml">
