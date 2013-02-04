@@ -24,14 +24,24 @@ public class DynamicBlockProcessor {
 		final DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 		final Document document = documentBuilder.parse("src/main/glide/taskboard.xml");
 
-		// This must be double encoded to survive two passes through Jelly
+		// These must be double encoded to survive two passes through Jelly
 		final String evaluate2js = xmlEscape(readTextFile("src/main/glide/evaluate2.js"));
+		final String css = xmlEscape(readTextFile("src/main/glide/style.css"));
 
 		final NodeList evaluate2nodes = document.getElementsByTagName("g2:evaluate");
 		for (int ix = 0; ix < evaluate2nodes.getLength(); ix++) {
 			Node node = evaluate2nodes.item(ix);
 			if (node.getAttributes().getNamedItem("id") != null && "evaluate2".equals(node.getAttributes().getNamedItem("id").getNodeValue())) {
 				node.setTextContent(evaluate2js);
+				node.getAttributes().removeNamedItem("id");
+			}
+		}
+
+		final NodeList stylenodes = document.getElementsByTagName("style");
+		for (int ix = 0; ix < stylenodes.getLength(); ix++) {
+			Node node = stylenodes.item(ix);
+			if (node.getAttributes().getNamedItem("id") != null && "style".equals(node.getAttributes().getNamedItem("id").getNodeValue())) {
+				node.setTextContent(css);
 				node.getAttributes().removeNamedItem("id");
 			}
 		}

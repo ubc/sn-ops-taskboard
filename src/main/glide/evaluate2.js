@@ -74,11 +74,11 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 			'Accepted': 'todo',
 			'Assigned': 'wip',
 			'Work in progress': 'wip',
-			'Pending Change': 'wip',
-			'Pending Schedule': 'wip',
+			'Pending Change': 'resolved',
+			'Pending Schedule': 'resolved',
 			'Pending Vendor': 'wip',
 			'Resolved': 'resolved',
-			'Open': 'wip', // DEMO INSTANCE ONLY
+			'Open': 'todo', // DEMO INSTANCE ONLY
 			'Closed/Resolved': 'resolved' // DEMO INSTANCE ONLY
 		};
 
@@ -181,9 +181,9 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 		var assignedToScore, priorityScore, openedAtParsed, openedAtDate, ageScore;
 
 		//noinspection JSLint
-		assignedToScore = taskRecord.assigned_to.toString() == user.getID().toString() ? 10000 : 0;
+		assignedToScore = taskRecord.assigned_to.toString() == user.getID().toString() ? 1000000 : 0;
 
-		priorityScore = (4 - taskRecord.priority.toString()) * 1000;
+		priorityScore = (4 - taskRecord.priority.toString()) * 10000;
 
 		// Date.parse seems to produce NaN no matter what.
 		// Note that opened_at is actually in the caller's time zone. This can lead to scores that are off by up to one day.
@@ -193,9 +193,9 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 		} else {
 			openedAtDate = new Date();
 		}
-		ageScore = (new Date().getTime() - openedAtDate.getTime()) / 86400000;
+		ageScore = (new Date().getTime() - openedAtDate.getTime()) / 86400 / 1000 * 10; // (Ten points per day)
 
-		return assignedToScore + priorityScore + ageScore;
+		return Math.round(assignedToScore + priorityScore + ageScore);
 	}
 
 	function taskPriorityComparator(a, b) {

@@ -1,0 +1,44 @@
+table.taskboard {
+	width: 100%;
+	border-spacing: 1.25em 0;
+	border-collapse: separate;
+}
+
+table.taskboard th {
+	width: 10%;
+	min-width: 15em;
+	background-color: #eeeeff;
+	border: 1px solid #eeeeff;
+}
+
+table.taskboard td {
+	vertical-align: top;
+	padding: 0;
+}
+
+table.taskboard ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;;
+}
+
+table.taskboard li {
+	margin: 0;
+	padding: 0;
+	border: 1px solid #bbbbff;
+	border-top-width: 0;
+}
+
+table.taskboard li div {
+	padding: 1px 0.5em;
+}
+
+table.taskboard p {
+	margin: 0.05em 0;
+	padding: 0;
+}
+
+table.taskboard p.taskboard_priority {
+	float: right;
+	color: #999999;
+}

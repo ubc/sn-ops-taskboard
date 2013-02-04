@@ -6,7 +6,10 @@
 	</g2:evaluate>
 
 	<div xmlns="http://www.w3.org/1999/xhtml">
-		<div>ok = $[ok]</div>
+		<!-- Invalid, but works -->
+		<style type="text/css" id="style">
+			<!-- style.css will be included here -->
+		</style>
 
 		<table class="taskboard">
 			<thead>
@@ -20,7 +23,7 @@
 				<tr>
 					<td>
 						<ul>
-							<j2:while test="$[todoBoard.next(20)]">
+							<j2:while test="$[todoBoard.next(50)]">
 								<li>
 									<p class="taskboard_priority">$[todoBoard.value().taskboard_priority]</p>
 									<p class="number"><a class="linked formlink" href="$[todoBoard.value().link]">$[todoBoard.value().number]</a></p>
@@ -47,7 +50,7 @@
 					</td>
 					<td>
 						<ul>
-							<j2:while test="$[wipBoard.next(20)]">
+							<j2:while test="$[wipBoard.next(50)]">
 								<li>
 									<p class="taskboard_priority">$[wipBoard.value().taskboard_priority]</p>
 									<p class="number"><a class="linked formlink" href="$[wipBoard.value().link]">$[wipBoard.value().number]</a></p>
@@ -74,7 +77,7 @@
 					</td>
 					<td>
 						<ul>
-							<j2:while test="$[resolvedBoard.next(20)]">
+							<j2:while test="$[resolvedBoard.next(50)]">
 								<li>
 									<p class="taskboard_priority">$[resolvedBoard.value().taskboard_priority]</p>
 									<p class="number"><a class="linked formlink" href="$[resolvedBoard.value().link]">$[resolvedBoard.value().number]</a></p>
