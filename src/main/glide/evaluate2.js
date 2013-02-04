@@ -42,6 +42,8 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 					opened_at: incidentRecords.opened_at.toString(),
 					assigned_to: incidentRecords.assigned_to.getDisplayValue(),
 					assigned_to_link: incidentRecords.assigned_to.getRefRecord().getLink(),
+					caller_id: incidentRecords.caller_id.getDisplayValue(),
+					caller_id_link: incidentRecords.caller_id.getLink(),
 					short_description: incidentRecords.short_description.toString(),
 					priority: incidentRecords.priority.getDisplayValue(),
 					state: incidentRecords.state.getDisplayValue(),
@@ -76,7 +78,8 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 			'Pending Schedule': 'wip',
 			'Pending Vendor': 'wip',
 			'Resolved': 'resolved',
-			'Open': 'wip' // DEMO INSTANCE ONLY
+			'Open': 'wip', // DEMO INSTANCE ONLY
+			'Closed/Resolved': 'resolved' // DEMO INSTANCE ONLY
 		};
 
 		function loadTasks() {
@@ -94,6 +97,8 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 					opened_at: problemRecords.opened_at.toString(),
 					assigned_to: problemRecords.assigned_to.getDisplayValue(),
 					assigned_to_link: problemRecords.assigned_to.getRefRecord().getLink(),
+					caller_id: problemRecords.caller_id.getDisplayValue(),
+					caller_id_link: problemRecords.caller_id.getLink(),
 					short_description: problemRecords.short_description.toString(),
 					priority: problemRecords.priority.getDisplayValue(),
 					state: problemRecords.state.getDisplayValue(),
@@ -132,9 +137,13 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 		var ix = -1;
 
 		return {
-			next: function () {
+			next: function (max) {
 				ix += 1;
-				return ix < array.length;
+				if (max !== undefined) {
+					return ix < array.length && ix < max;
+				} else {
+					return ix < array.length;
+				}
 			},
 			key: function () {
 				return ix;
