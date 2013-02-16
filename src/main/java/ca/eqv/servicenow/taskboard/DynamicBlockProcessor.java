@@ -24,27 +24,16 @@ public class DynamicBlockProcessor {
 		final DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 		final Document document = documentBuilder.parse("src/main/glide/taskboard.xml");
 
+		final String evaluatejs = readTextFile("src/main/glide/evaluate.js");
+
+		setTextContents(document.getElementsByTagName("g:evaluate"), "evaluate", evaluatejs);
+
 		// These must be double encoded to survive two passes through Jelly
 		final String evaluate2js = xmlEscape(readTextFile("src/main/glide/evaluate2.js"));
 		final String css = xmlEscape(readTextFile("src/main/glide/style.css"));
 
-		final NodeList evaluate2nodes = document.getElementsByTagName("g2:evaluate");
-		for (int ix = 0; ix < evaluate2nodes.getLength(); ix++) {
-			Node node = evaluate2nodes.item(ix);
-			if (node.getAttributes().getNamedItem("id") != null && "evaluate2".equals(node.getAttributes().getNamedItem("id").getNodeValue())) {
-				node.setTextContent(evaluate2js);
-				node.getAttributes().removeNamedItem("id");
-			}
-		}
-
-		final NodeList stylenodes = document.getElementsByTagName("style");
-		for (int ix = 0; ix < stylenodes.getLength(); ix++) {
-			Node node = stylenodes.item(ix);
-			if (node.getAttributes().getNamedItem("id") != null && "style".equals(node.getAttributes().getNamedItem("id").getNodeValue())) {
-				node.setTextContent(css);
-				node.getAttributes().removeNamedItem("id");
-			}
-		}
+		setTextContents(document.getElementsByTagName("g2:evaluate"), "evaluate2", evaluate2js);
+		setTextContents(document.getElementsByTagName("style"), "style", css);
 
 		final Comment comment = document.createComment("\n\n*** THIS IS A GENERATED FILE. Do not edit. ***\nCopyright (c) 2013 eqv.ca All Rights Reserved\n\n");
 		document.insertBefore(comment, document.getFirstChild());
@@ -90,5 +79,15 @@ public class DynamicBlockProcessor {
 		}
 
 		return stringBuilder.toString();
+	}
+
+	public static void setTextContents(final NodeList candidateNodes, final String id, final String textContents) {
+		for (int ix = 0; ix < candidateNodes.getLength(); ix++) {
+			Node node = candidateNodes.item(ix);
+			if (node.getAttributes().getNamedItem("id") != null && id.equals(node.getAttributes().getNamedItem("id").getNodeValue())) {
+				node.setTextContent(textContents);
+				node.getAttributes().removeNamedItem("id");
+			}
+		}
 	}
 }

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
 
+	<g:evaluate id="evaluate">
+		<!-- evaluate.js will be included here -->
+	</g:evaluate>
+
 	<g2:evaluate id="evaluate2">
 		<!-- evaluate2.js will be included here -->
 	</g2:evaluate>
@@ -14,94 +18,44 @@
 		<table class="taskboard">
 			<thead>
 				<tr>
-					<th>To Do</th>
-					<th>In Progress</th>
-					<th>Resolved</th>
+					${boards.reset()}
+					<j:while test="${boards.next()}">
+						<th>${boards.name()}</th>
+					</j:while>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<td>
-						<ul>
-							<j2:while test="$[todoBoard.next(50)]">
-								<li>
-									<p class="taskboard_priority">$[todoBoard.value().taskboard_priority]</p>
-									<p class="number"><a class="linked formlink" href="$[todoBoard.value().link]">$[todoBoard.value().number]</a></p>
-									<p class="short_description">$[todoBoard.value().short_description]</p>
-									<p class="caller">
-										<j2:if test="$[!!todoBoard.value().caller_id]">
-											<a class="linked formlink" href="$[todoBoard.value().caller_id_link]">$[todoBoard.value().caller_id]</a>
-										</j2:if>
-										<j2:if test="$[!todoBoard.value().caller_id]">
-											&#xA0;
-										</j2:if>
-									</p>
-									<p class="assigned_to">
-										<j2:if test="$[!!todoBoard.value().assigned_to]">
-											<a class="linked formlink" href="$[todoBoard.value().assigned_to_link]">$[todoBoard.value().assigned_to]</a>
-										</j2:if>
-										<j2:if test="$[!todoBoard.value().assigned_to]">
-											&#xA0;
-										</j2:if>
-									</p>
-								</li>
-							</j2:while>
-						</ul>
-					</td>
-					<td>
-						<ul>
-							<j2:while test="$[wipBoard.next(50)]">
-								<li>
-									<p class="taskboard_priority">$[wipBoard.value().taskboard_priority]</p>
-									<p class="number"><a class="linked formlink" href="$[wipBoard.value().link]">$[wipBoard.value().number]</a></p>
-									<p class="short_description">$[wipBoard.value().short_description]</p>
-									<p class="caller">
-										<j2:if test="$[!!wipBoard.value().caller_id]">
-											<a class="linked formlink" href="$[wipBoard.value().caller_id_link]">$[wipBoard.value().caller_id]</a>
-										</j2:if>
-										<j2:if test="$[!wipBoard.value().caller_id]">
-											&#xA0;
-										</j2:if>
-									</p>
-									<p class="assigned_to">
-										<j2:if test="$[!!wipBoard.value().assigned_to]">
-											<a class="linked formlink" href="$[wipBoard.value().assigned_to_link]">$[wipBoard.value().assigned_to]</a>
-										</j2:if>
-										<j2:if test="$[!wipBoard.value().assigned_to]">
-											&#xA0;
-										</j2:if>
-									</p>
-								</li>
-							</j2:while>
-						</ul>
-					</td>
-					<td>
-						<ul>
-							<j2:while test="$[resolvedBoard.next(50)]">
-								<li>
-									<p class="taskboard_priority">$[resolvedBoard.value().taskboard_priority]</p>
-									<p class="number"><a class="linked formlink" href="$[resolvedBoard.value().link]">$[resolvedBoard.value().number]</a></p>
-									<p class="short_description">$[resolvedBoard.value().short_description]</p>
-									<p class="caller">
-										<j2:if test="$[!!resolvedBoard.value().caller_id]">
-											<a class="linked formlink" href="$[resolvedBoard.value().caller_id_link]">$[resolvedBoard.value().caller_id]</a>
-										</j2:if>
-										<j2:if test="$[!resolvedBoard.value().caller_id]">
-											&#xA0;
-										</j2:if>
-									</p>
-									<p class="assigned_to">
-										<j2:if test="$[!!resolvedBoard.value().assigned_to]">
-											<a class="linked formlink" href="$[resolvedBoard.value().assigned_to_link]">$[resolvedBoard.value().assigned_to]</a>
-										</j2:if>
-										<j2:if test="$[!resolvedBoard.value().assigned_to]">
-											&#xA0;
-										</j2:if>
-									</p>
-								</li>
-							</j2:while>
-						</ul>
-					</td>
+					${boards.reset()}
+					<j:while test="${boards.next()}">
+						<td>
+							<ul>
+								<j2:while test="$[${boards.variable()}.next(50)]">
+									<li>
+										<p class="taskboard_priority">$[${boards.variable()}.value().taskboard_priority]</p>
+										<p class="number"><a class="linked formlink" href="$[${boards.variable()}.value().link]">$[${boards.variable()}.value().number]</a></p>
+										<p class="short_description">$[${boards.variable()}.value().short_description]</p>
+										<p class="caller">
+											<j2:if test="$[!!${boards.variable()}.value().caller_id]">
+												<a class="linked formlink" href="$[${boards.variable()}.value().caller_id_link]">$[${boards.variable()}.value().caller_id]</a>
+											</j2:if>
+											<j2:if test="$[!${boards.variable()}.value().caller_id]">
+												&#xA0;
+											</j2:if>
+										</p>
+										<p class="assigned_to">
+											<j2:if test="$[!!${boards.variable()}.value().assigned_to]">
+												<a class="linked formlink" href="$[${boards.variable()}.value().assigned_to_link]">$[${boards.variable()}.value().assigned_to]</a>
+											</j2:if>
+											<j2:if test="$[!${boards.variable()}.value().assigned_to]">
+												&#xA0;
+											</j2:if>
+										</p>
+									</li>
+								</j2:while>
+							</ul>
+						</td>
+					</j:while>
 				</tr>
 			</tbody>
 		</table>
