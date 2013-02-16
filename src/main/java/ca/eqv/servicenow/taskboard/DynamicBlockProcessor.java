@@ -35,7 +35,7 @@ public class DynamicBlockProcessor {
 		setTextContents(document.getElementsByTagName("g2:evaluate"), "evaluate2", evaluate2js);
 		setTextContents(document.getElementsByTagName("style"), "style", css);
 
-		final Comment comment = document.createComment("\n\n*** THIS IS A GENERATED FILE. Do not edit. ***\nCopyright (c) 2013 eqv.ca All Rights Reserved\n\n");
+		final Comment comment = document.createComment("\n\n*** THIS IS A GENERATED FILE. Do not edit. ***\n\n");
 		document.insertBefore(comment, document.getFirstChild());
 
 		final TransformerFactory transformerFactory = TransformerFactory.newInstance();

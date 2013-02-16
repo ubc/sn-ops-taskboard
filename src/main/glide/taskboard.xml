@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
 
+	&amp;lt;!--
+	Operations Task Board for Service Now
+	Copyright (C) 2013 William Ono
+
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU Affero General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU Affero General Public License for more details.
+
+	Source code is available from https://github.com/wmono/sn-op-taskboard
+	--&amp;gt;
+
 	<g:evaluate id="evaluate">
 		<!-- evaluate.js will be included here -->
 	</g:evaluate>
