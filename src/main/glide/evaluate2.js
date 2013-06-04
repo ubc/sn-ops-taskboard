@@ -213,6 +213,30 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 		return b.taskboard_priority - a.taskboard_priority;
 	}
 
+	function getMethodListing(javaObject) {
+		var output, javaClass, methods, methodsIx, method, params, paramsIx;
+
+		javaClass = javaObject.getClass();
+		output = javaClass.getName() + "\n";
+
+		methods = javaClass.getMethods();
+		for (methodsIx = 0; methodsIx < methods.length; methodsIx++) {
+			method = methods[methodsIx];
+			output += "  " + method.getName();
+
+			output += "(";
+			params = method.getParameterTypes();
+			for (paramsIx = 0; paramsIx < params.length; paramsIx++) {
+				if (paramsIx > 0) {
+					output += ", ";
+				}
+				output += params[paramsIx].getName();
+			}
+			output += ")\n";
+		}
+		return output;
+	}
+
 	incidents.loadTasks();
 	problems.loadTasks();
 
