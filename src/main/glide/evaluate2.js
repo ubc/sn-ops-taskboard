@@ -3,9 +3,10 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 
 (function () {
 	"use strict";
-	var user, boards, incidents, problems;
+	var user, groups, boards, incidents, problems;
 
 	user = gs.getUser();
+	groups = user.getMyGroups();
 
 	boards = {
 		todo: [],
@@ -30,9 +31,14 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 		function loadTasks() {
 			var incidentRecords, task, taskboard;
 
+			if (!groups.hasNext()) {
+				// No groups, no access
+				return;
+			}
+
 			incidentRecords = new GlideRecord('incident');
 			incidentRecords.addActiveFilter();
-			// TODO: Filter for assignment group
+			incidentRecords.addQuery('assignment_group', groups);
 			incidentRecords.query();
 
 			while (incidentRecords.next()) {
@@ -85,9 +91,14 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 		function loadTasks() {
 			var problemRecords, task, taskboard;
 
+			if (!groups.hasNext()) {
+				// No groups, no access
+				return;
+			}
+
 			problemRecords = new GlideRecord('problem');
 			problemRecords.addActiveFilter();
-			// TODO: Filter for assignment group
+			problemRecords.addQuery('assignment_group', groups);
 			problemRecords.query();
 
 			while (problemRecords.next()) {
