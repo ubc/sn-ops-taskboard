@@ -35,7 +35,7 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 		function loadTasks() {
 			var incidentRecords, task, taskboard;
 
-			if (!groups.hasNext()) {
+			if (groups.isEmpty()) {
 				// No groups, no access
 				return;
 			}
@@ -94,7 +94,7 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 		function loadTasks() {
 			var problemRecords, task, taskboard;
 
-			if (!groups.hasNext()) {
+			if (groups.isEmpty()) {
 				// No groups, no access
 				return;
 			}
