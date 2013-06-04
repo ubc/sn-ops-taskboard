@@ -48,23 +48,24 @@
 						<td>
 							<ul>
 								<j2:while test="$[${boards.variable()}.next(50)]">
+									<g2:evaluate object="true">var task = ${boards.variable()}.value();</g2:evaluate>
 									<li>
-										<p class="taskboard_priority">$[${boards.variable()}.value().taskboard_priority]</p>
-										<p class="number"><a class="linked formlink" href="$[${boards.variable()}.value().link]">$[${boards.variable()}.value().number]</a></p>
-										<p class="short_description">$[${boards.variable()}.value().short_description]</p>
+										<p class="taskboard_priority">$[task.taskboard_priority]</p>
+										<p class="number"><a class="linked formlink" href="$[task.link]">$[task.number]</a></p>
+										<p class="short_description">$[task.short_description]</p>
 										<p class="caller">
-											<j2:if test="$[!!${boards.variable()}.value().caller_id]">
-												<a class="linked formlink" href="$[${boards.variable()}.value().caller_id_link]">$[${boards.variable()}.value().caller_id]</a>
+											<j2:if test="$[!!task.caller_id]">
+												<a class="linked formlink" href="$[task.caller_id_link]">$[task.caller_id]</a>
 											</j2:if>
-											<j2:if test="$[!${boards.variable()}.value().caller_id]">
+											<j2:if test="$[!task.caller_id]">
 												&#xA0;
 											</j2:if>
 										</p>
 										<p class="assigned_to">
-											<j2:if test="$[!!${boards.variable()}.value().assigned_to]">
-												<a class="linked formlink" href="$[${boards.variable()}.value().assigned_to_link]">$[${boards.variable()}.value().assigned_to]</a>
+											<j2:if test="$[!!task.assigned_to]">
+												<a class="linked formlink" href="$[task.assigned_to_link]">$[task.assigned_to]</a>
 											</j2:if>
-											<j2:if test="$[!${boards.variable()}.value().assigned_to]">
+											<j2:if test="$[!task.assigned_to]">
 												&#xA0;
 											</j2:if>
 										</p>
