@@ -19,26 +19,39 @@ table.taskboard td {
 table.taskboard ul {
 	margin: 0;
 	padding: 0;
-	list-style-type: none;;
+	list-style-type: none;
 }
 
-table.taskboard li {
+table.taskboard li.task {
 	margin: 0;
-	padding: 0;
+	padding: 0.25em 0.5em;
 	border: 1px solid #bbbbff;
 	border-top-width: 0;
 }
 
-table.taskboard li div {
+table.taskboard li.task.mine {
+	background-color: #ffffdf;
+}
+
+table.taskboard li.task div {
 	padding: 1px 0.5em;
 }
 
-table.taskboard p {
-	margin: 0.05em 0;
+table.taskboard li.task p {
+	margin: 0.2em 0;
 	padding: 0;
 }
 
-table.taskboard p.taskboard_priority {
+table.taskboard li.task p.taskboard_priority {
 	float: right;
 	color: #999999;
+	font-size: 60%;
+}
+
+table.taskboard li.task a {
+	text-decoration: none;
+}
+
+table.taskboard li.task a:hover {
+	text-decoration: underline;
 }

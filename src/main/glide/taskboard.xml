@@ -49,18 +49,16 @@
 							<ul>
 								<j2:while test="$[${boards.variable()}.next(50)]">
 									<g2:evaluate object="true">var task = ${boards.variable()}.value();</g2:evaluate>
-									<li>
+									<g2:evaluate object="true">var taskClassMine = task.taskboard_my_task ? 'mine' : '';</g2:evaluate>
+									<li class="task $[taskClassMine]">
 										<p class="taskboard_priority">$[task.taskboard_priority]</p>
-										<p class="number"><a class="linked formlink" href="$[task.link]">$[task.number]</a></p>
-										<p class="short_description">$[task.short_description]</p>
-										<p class="caller">
+										<p>
+											<span class="number"><a class="linked formlink" href="$[task.link]">$[task.number]</a></span>
 											<j2:if test="$[!!task.caller_id]">
-												<a class="linked formlink" href="$[task.caller_id_link]">$[task.caller_id]</a>
-											</j2:if>
-											<j2:if test="$[!task.caller_id]">
-												&#xA0;
+	                                            (<span class="caller"><a class="linked formlink" href="$[task.caller_id_link]">$[task.caller_id]</a></span>)
 											</j2:if>
 										</p>
+										<p class="short_description">$[task.short_description]</p>
 										<p class="assigned_to">
 											<j2:if test="$[!!task.assigned_to]">
 												<a class="linked formlink" href="$[task.assigned_to_link]">$[task.assigned_to]</a>

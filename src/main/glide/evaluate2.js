@@ -57,7 +57,8 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 					short_description: incidentRecords.short_description.toString(),
 					priority: incidentRecords.priority.getDisplayValue(),
 					state: incidentRecords.state.getDisplayValue(),
-					taskboard_priority: computeTaskPriority(incidentRecords)
+					taskboard_priority: computeTaskPriority(incidentRecords),
+					taskboard_my_task: incidentRecords.assigned_to == user.getID()
 				};
 
 				taskboard = getBoardForTask(task);
@@ -116,7 +117,8 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 					short_description: problemRecords.short_description.toString(),
 					priority: problemRecords.priority.getDisplayValue(),
 					state: problemRecords.state.getDisplayValue(),
-					taskboard_priority: computeTaskPriority(problemRecords)
+					taskboard_priority: computeTaskPriority(problemRecords),
+					taskboard_my_task: problemRecords.assigned_to == user.getID()
 				};
 
 				taskboard = getBoardForTask(task);
