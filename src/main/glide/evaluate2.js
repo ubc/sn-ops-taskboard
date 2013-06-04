@@ -199,7 +199,7 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 	function computeTaskPriority(task) {
 		var assignedToScore, priorityScore, expeditedScore, openedAtParsed, openedAtDate, ageScore;
 
-		assignedToScore = task.taskboard_my_task ? 1000000 : 0;
+		assignedToScore = 0; // task.taskboard_my_task ? 1000000 : 0;
 		expeditedScore = task.taskboard_expedited ? 1000000 : 0;
 
 		priorityScore = (4 - task.priority_number) * 10000;
