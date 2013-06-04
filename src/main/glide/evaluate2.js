@@ -15,18 +15,22 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 	};
 
 	incidents = (function () {
-		var stateTaskboardMap;
 
-		stateTaskboardMap = {
-			'New': null,
-			'Accepted': 'todo',
-			'Assigned': 'wip',
-			'Work in progress': 'wip',
-			'Pending Change': 'wip',
-			'Pending Vendor': 'wip',
-			'Resolved': 'resolved',
-			'Active': 'wip' // DEMO INSTANCE ONLY
-		};
+		function getBoardForTask(task) {
+			if (task.state == "New") {
+				return null;
+			}
+			if (task.state == "Closed") {
+				return null;
+			}
+			if (!task.assigned_to) {
+				return 'todo';
+			}
+			if (task.state == "Resolved") {
+				return 'resolved';
+			}
+			return 'wip';
+		}
 
 		function loadTasks() {
 			var incidentRecords, task, taskboard;
@@ -56,11 +60,8 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 					taskboard_priority: computeTaskPriority(incidentRecords)
 				};
 
-				taskboard = stateTaskboardMap[task.state];
-				if (taskboard === undefined) {
-					taskboard = 'todo';
-					task.short_description = '(unknown state ' + task.state + ') ' + task.short_description;
-				}
+				taskboard = getBoardForTask(task);
+
 				if (taskboard !== null) {
 					boards[taskboard].push(task);
 				}
@@ -73,20 +74,22 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 	}());
 
 	problems = (function () {
-		var stateTaskboardMap;
 
-		stateTaskboardMap = {
-			'New': 'todo',
-			'Accepted': 'todo',
-			'Assigned': 'wip',
-			'Work in progress': 'wip',
-			'Pending Change': 'resolved',
-			'Pending Schedule': 'resolved',
-			'Pending Vendor': 'wip',
-			'Resolved': 'resolved',
-			'Open': 'todo', // DEMO INSTANCE ONLY
-			'Closed/Resolved': 'resolved' // DEMO INSTANCE ONLY
-		};
+		function getBoardForTask(task) {
+			if (task.state == "New") {
+				return null;
+			}
+			if (task.state == "Closed") {
+				return null;
+			}
+			if (!task.assigned_to) {
+				return 'todo';
+			}
+			if (task.state == "Resolved") {
+				return 'resolved';
+			}
+			return 'wip';
+		}
 
 		function loadTasks() {
 			var problemRecords, task, taskboard;
@@ -116,11 +119,8 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 					taskboard_priority: computeTaskPriority(problemRecords)
 				};
 
-				taskboard = stateTaskboardMap[task.state];
-				if (taskboard === undefined) {
-					taskboard = 'todo';
-					task.short_description = '(unknown state ' + task.state + ') ' + task.short_description;
-				}
+				taskboard = getBoardForTask(task);
+
 				if (taskboard !== null) {
 					boards[taskboard].push(task);
 				}
