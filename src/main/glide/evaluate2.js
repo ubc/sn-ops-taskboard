@@ -61,6 +61,7 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 				};
 
 				task.taskboard_my_task = incidentRecords.assigned_to == user.getID();
+				task.taskboard_expedited = computeTaskExpedited(task);
 				task.taskboard_priority = computeTaskPriority(task);
 
 				taskboard = getBoardForTask(task);
@@ -123,6 +124,7 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 				};
 
 				task.taskboard_my_task = problemRecords.assigned_to == user.getID();
+				task.taskboard_expedited = computeTaskExpedited(task);
 				task.taskboard_priority = computeTaskPriority(task);
 
 				taskboard = getBoardForTask(task);
@@ -195,9 +197,10 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 	}
 
 	function computeTaskPriority(task) {
-		var assignedToScore, priorityScore, openedAtParsed, openedAtDate, ageScore;
+		var assignedToScore, priorityScore, expeditedScore, openedAtParsed, openedAtDate, ageScore;
 
 		assignedToScore = task.taskboard_my_task ? 1000000 : 0;
+		expeditedScore = task.taskboard_expedited ? 1000000 : 0;
 
 		priorityScore = (4 - task.priority_number) * 10000;
 
@@ -211,7 +214,11 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 		}
 		ageScore = (new Date().getTime() - openedAtDate.getTime()) / 86400 / 1000 * 10; // (Ten points per day)
 
-		return Math.round(assignedToScore + priorityScore + ageScore);
+		return Math.round(assignedToScore + expeditedScore + priorityScore + ageScore);
+	}
+
+	function computeTaskExpedited(task) {
+		return !!task.short_description.match(/<\*>/);
 	}
 
 	function taskPriorityComparator(a, b) {

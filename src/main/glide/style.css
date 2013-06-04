@@ -33,6 +33,10 @@ table.taskboard li.task.mine {
 	background-color: #ffffdf;
 }
 
+table.taskboard li.task.expedited {
+	background-color: #ffd0d0;
+}
+
 table.taskboard li.task div {
 	padding: 1px 0.5em;
 }
