@@ -47,7 +47,7 @@
 					<j:while test="${boards.next()}">
 						<td>
 							<ul>
-								<j2:while test="$[${boards.variable()}.next(50)]">
+								<j2:while test="$[${boards.variable()}.next()]">
 									<g2:evaluate object="true">var task = ${boards.variable()}.value();</g2:evaluate>
 									<g2:evaluate object="true">var taskClassMine = task.taskboard_my_task ? 'mine' : '';</g2:evaluate>
 									<li class="task $[taskClassMine]">
