@@ -56,10 +56,12 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 					caller_id_link: incidentRecords.caller_id.getLink(),
 					short_description: incidentRecords.short_description.toString(),
 					priority: incidentRecords.priority.getDisplayValue(),
-					state: incidentRecords.state.getDisplayValue(),
-					taskboard_priority: computeTaskPriority(incidentRecords),
-					taskboard_my_task: incidentRecords.assigned_to == user.getID()
+					priority_number: incidentRecords.priority.toString(),
+					state: incidentRecords.state.getDisplayValue()
 				};
+
+				task.taskboard_my_task = incidentRecords.assigned_to == user.getID();
+				task.taskboard_priority = computeTaskPriority(task);
 
 				taskboard = getBoardForTask(task);
 
@@ -116,10 +118,12 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 					caller_id_link: problemRecords.caller_id.getLink(),
 					short_description: problemRecords.short_description.toString(),
 					priority: problemRecords.priority.getDisplayValue(),
+					priority_number: problemRecords.priority.toString(),
 					state: problemRecords.state.getDisplayValue(),
-					taskboard_priority: computeTaskPriority(problemRecords),
-					taskboard_my_task: problemRecords.assigned_to == user.getID()
 				};
+
+				task.taskboard_my_task = problemRecords.assigned_to == user.getID();
+				task.taskboard_priority = computeTaskPriority(task);
 
 				taskboard = getBoardForTask(task);
 
@@ -190,17 +194,16 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 		};
 	}
 
-	function computeTaskPriority(taskRecord) {
+	function computeTaskPriority(task) {
 		var assignedToScore, priorityScore, openedAtParsed, openedAtDate, ageScore;
 
-		//noinspection JSLint
-		assignedToScore = taskRecord.assigned_to.toString() == user.getID().toString() ? 1000000 : 0;
+		assignedToScore = task.taskboard_my_task ? 1000000 : 0;
 
-		priorityScore = (4 - taskRecord.priority.toString()) * 10000;
+		priorityScore = (4 - task.priority_number) * 10000;
 
 		// Date.parse seems to produce NaN no matter what.
 		// Note that opened_at is actually in the caller's time zone. This can lead to scores that are off by up to one day.
-		openedAtParsed = taskRecord.opened_at.toString().match(/^(\d{4})-(\d{2})-(\d{2})\D(\d{2}):(\d{2}):(\d{2})/m);
+		openedAtParsed = task.opened_at.match(/^(\d{4})-(\d{2})-(\d{2})\D(\d{2}):(\d{2}):(\d{2})/m);
 		if (openedAtParsed[6] !== undefined) {
 			openedAtDate = new Date(openedAtParsed[1], openedAtParsed[2] - 1, openedAtParsed[3], openedAtParsed[4], openedAtParsed[5], openedAtParsed[6]);
 		} else {
