@@ -1,3 +1,5 @@
+/*global gs */
+
 var taskboard = (function () {
 	"use strict";
 	var object;
@@ -23,7 +25,7 @@ var taskboard = (function () {
 		array.next = function (max) {
 			array.ix += 1;
 			if (max !== undefined) {
-				return array.ix < array.length && ix < max;
+				return array.ix < array.length && array.ix < max;
 			} else {
 				return array.ix < array.length;
 			}
