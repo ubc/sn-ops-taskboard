@@ -56,16 +56,14 @@
 										<p>
 											<span class="number"><a class="linked formlink" href="$[task.link]">$[task.number]</a></span>
 											<j2:if test="$[!!task.caller_id]">
-	                                            (<span class="caller"><a class="linked formlink" href="$[task.caller_id_link]">$[task.caller_id]</a></span>)
+	                                            (<span class="caller_id"><a class="linked formlink" href="$[task.caller_id_link]">$[task.caller_id]</a></span>)
 											</j2:if>
 										</p>
 										<p class="short_description">$[task.short_description]</p>
-										<p class="assigned_to">
+										<p>
+											<span class="state">$[task.state]</span>
 											<j2:if test="$[!!task.assigned_to]">
-												<a class="linked formlink" href="$[task.assigned_to_link]">$[task.assigned_to]</a>
-											</j2:if>
-											<j2:if test="$[!task.assigned_to]">
-												&#xA0;
+												- <span class="assigned_to"><a class="linked formlink" href="$[task.assigned_to_link]">$[task.assigned_to]</a></span>
 											</j2:if>
 										</p>
 									</li>
