@@ -50,6 +50,13 @@ table.taskboard li.task p {
 	padding: 0;
 }
 
+table.taskboard li.task p.task_type {
+	float: right;
+	clear: right;
+	padding: 0.1em 1em;
+	text-transform: capitalize;
+}
+
 table.taskboard li.task p.taskboard_priority {
 	float: right;
 	color: #999999;
