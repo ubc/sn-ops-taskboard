@@ -16,23 +16,23 @@ var taskboard = (function () {
 	object.currentGroups = object.currentUser.getMyGroups();
 
 	function makeArrayIterable(array) {
-		array.ix = -1;
+		var ix = -1;
 
 		array.reset = function () {
-			array.ix = -1;
+			ix = -1;
 		};
 
 		array.next = function (max) {
-			array.ix += 1;
+			ix += 1;
 			if (max !== undefined) {
-				return array.ix < array.length && array.ix < max;
+				return ix < array.length && ix < max;
 			} else {
-				return array.ix < array.length;
+				return ix < array.length;
 			}
 		};
 
 		array.value = function () {
-			return array[array.ix];
+			return array[ix];
 		};
 
 		return array;
