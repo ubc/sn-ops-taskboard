@@ -58,26 +58,29 @@ table.taskboard li.task p.task_type {
 }
 
 table.taskboard li.task p.taskboard_priority {
+	display: none;
 	float: right;
-	color: #999999;
+	clear: right;
+	color: #666666;
 	font-size: 60%;
 }
 
 table.taskboard li.task p.priority {
 	float: right;
+	clear: right;
 	padding: 0.1em 1em;
 }
-table.taskboard li.task p.priority.priority_4 {
+table.taskboard li.task.priority_4 p.priority {
 	color: #7c9999;
 }
-table.taskboard li.task p.priority.priority_3 {
+table.taskboard li.task.priority_3 p.priority {
 	color: #808080;
 }
-table.taskboard li.task p.priority.priority_2 {
+table.taskboard li.task.priority_2 p.priority {
 	color: #000000;
 	background-color: #ffd080;
 }
-table.taskboard li.task p.priority.priority_1 {
+table.taskboard li.task.priority_1 p.priority {
 	color: #ffffff;
 	background-color: #ff0000;
 	font-weight: bold;
