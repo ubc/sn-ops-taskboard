@@ -4,8 +4,8 @@
 	"use strict";
 	var user, groups, incidents, problems;
 
-	user = gs.getUser();
-	groups = user.getMyGroups();
+	user = taskboard.currentUser;
+	groups = taskboard.currentGroups;
 
 	incidents = (function () {
 		function loadTasks() {

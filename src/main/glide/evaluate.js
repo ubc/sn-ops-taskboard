@@ -10,6 +10,9 @@ var taskboard = (function () {
 		{ key: 'resolved', name: 'Done' }
 	];
 
+	object.currentUser = gs.getUser();
+	object.currentGroups = object.currentUser.getMyGroups();
+
 	function makeArrayIterable(array) {
 		array.ix = -1;
 
