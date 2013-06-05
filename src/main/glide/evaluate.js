@@ -1,30 +1,43 @@
 var taskboard = (function () {
 	"use strict";
-	var object, boardKeys, boardNames, ix;
+	var object;
 
-	boardKeys = ['todoBoard', 'wipBoard', 'resolvedBoard'];
-	boardNames = ['Unassigned', 'In Progress', 'Done'];
+	object = {};
 
-	object = {
-		next: function () {
-			ix += 1;
-			return ix < boardKeys.length;
-		},
-		reset: function () {
-			ix = -1;
-		},
-		key: function () {
-			return boardKeys[ix];
-		},
-		name: function () {
-			return boardNames[ix];
-		}
-	};
+	object.boards = [
+		{ key: 'todo', name: 'Unassigned' },
+		{ key: 'wip', name: 'In Progress' },
+		{ key: 'resolved', name: 'Done' }
+	];
 
-	for (ix = 0; ix < boardKeys.length; ix++) {
-		object[boardKeys[ix]] = [];
+	function makeArrayIterable(array) {
+		array.ix = -1;
+
+		array.reset = function () {
+			array.ix = -1;
+		};
+
+		array.next = function (max) {
+			array.ix += 1;
+			if (max !== undefined) {
+				return array.ix < array.length && ix < max;
+			} else {
+				return array.ix < array.length;
+			}
+		};
+
+		array.value = function () {
+			return array[array.ix];
+		};
+
+		return array;
 	}
 
-	ix = -1;
+	makeArrayIterable(object.boards);
+
+	while (object.boards.next()) {
+		object[object.boards.value().key] = makeArrayIterable([]);
+	}
+
 	return object;
 }());

@@ -2,16 +2,10 @@
 
 (function () {
 	"use strict";
-	var user, groups, boards, incidents, problems;
+	var user, groups, incidents, problems;
 
 	user = gs.getUser();
 	groups = user.getMyGroups();
-
-	boards = {
-		todo: [],
-		wip: [],
-		resolved: []
-	};
 
 	incidents = (function () {
 		function loadTasks() {
@@ -49,7 +43,7 @@
 				boardKey = getBoardForTask(task);
 
 				if (boardKey) {
-					boards[boardKey].push(task);
+					taskboard[boardKey].push(task);
 				}
 			}
 		}
@@ -95,7 +89,7 @@
 				boardKey = getBoardForTask(task);
 
 				if (boardKey !== null) {
-					boards[boardKey].push(task);
+					taskboard[boardKey].push(task);
 				}
 			}
 		}
@@ -104,62 +98,6 @@
 			loadTasks: loadTasks
 		};
 	}());
-
-	function getKeyNames(object) {
-		var key, keys;
-
-		keys = [];
-		for (key in object) {
-			if (Object.prototype.hasOwnProperty.call(object, key)) {
-				keys.push(key);
-			}
-		}
-		return keys;
-	}
-
-	function makeIterableArray(array) {
-		var ix = -1;
-
-		return {
-			next: function (max) {
-				ix += 1;
-				if (max !== undefined) {
-					return ix < array.length && ix < max;
-				} else {
-					return ix < array.length;
-				}
-			},
-			key: function () {
-				return ix;
-			},
-			value: function () {
-				return array[ix];
-			},
-			array: array
-		};
-	}
-
-	function makeIterableObject(object) {
-		var keyIx, keys;
-
-		keys = getKeyNames(object);
-		keyIx = -1;
-
-		return {
-			next: function () {
-				keyIx += 1;
-				return keyIx < keys.length;
-			},
-			key: function () {
-				return keys[keyIx];
-			},
-			value: function () {
-				return object[keys[keyIx]];
-			},
-			object: object,
-			keys: makeIterableArray(keys)
-		};
-	}
 
 	function getBoardForTask(task) {
 		if (task.state == "New") {
@@ -242,11 +180,8 @@
 	incidents.loadTasks();
 	problems.loadTasks();
 
-	boards.todo.sort(taskPriorityComparator);
-	boards.wip.sort(taskPriorityComparator);
-	boards.resolved.sort(taskPriorityComparator);
-
-	taskboard.todoBoard = makeIterableArray(boards.todo);
-	taskboard.wipBoard = makeIterableArray(boards.wip);
-	taskboard.resolvedBoard = makeIterableArray(boards.resolved);
+	taskboard.boards.reset();
+	while (taskboard.boards.next()) {
+		taskboard[taskboard.boards.value().key].sort(taskPriorityComparator);
+	}
 }());

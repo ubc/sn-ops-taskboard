@@ -35,20 +35,21 @@
 		<table class="taskboard">
 			<thead>
 				<tr>
-					${taskboard.reset()}
-					<j:while test="${taskboard.next()}">
-						<th>${taskboard.name()}</th>
+					${taskboard.boards.reset()}
+					<j:while test="${taskboard.boards.next()}">
+						<th>${taskboard.boards.value().name}</th>
 					</j:while>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					${taskboard.reset()}
-					<j:while test="${taskboard.next()}">
+					${taskboard.boards.reset()}
+					<j:while test="${taskboard.boards.next()}">
+						<g2:evaluate object="true">var board = taskboard.${taskboard.boards.value().key};</g2:evaluate>
 						<td>
 							<ul>
-								<j2:while test="$[taskboard.${taskboard.key()}.next()]">
-									<g2:evaluate object="true">var task = taskboard.${taskboard.key()}.value();</g2:evaluate>
+								<j2:while test="$[board.next()]">
+									<g2:evaluate object="true">var task = board.value();</g2:evaluate>
 									<g2:evaluate object="true">var taskClassMine = task.taskboard_assigned_to_me ? 'mine' : '';</g2:evaluate>
 									<g2:evaluate object="true">var taskClassExpedited = task.taskboard_expedited ? 'expedited' : '';</g2:evaluate>
 									<li class="task $[taskClassMine] $[taskClassExpedited]">
