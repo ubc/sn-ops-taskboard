@@ -86,7 +86,7 @@ var todoBoard, wipBoard, resolvedBoard;
 					short_description: problemRecords.short_description.toString(),
 					priority: problemRecords.priority.getDisplayValue(),
 					priority_number: problemRecords.priority.toString(),
-					state: problemRecords.state.getDisplayValue(),
+					state: problemRecords.state.getDisplayValue()
 				};
 
 				task.taskboard_assigned_to_me = problemRecords.assigned_to == user.getID();
