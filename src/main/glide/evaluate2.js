@@ -2,13 +2,16 @@
 
 (function () {
 	"use strict";
+	var tasks;
 
 	function loadTasks(tableName, taskConverter) {
-		var records, task, boardKey;
+		var tasks, records, task;
+
+		tasks = [];
 
 		if (taskboard.currentGroups.isEmpty()) {
 			// No groups, no access
-			return;
+			return tasks;
 		}
 
 		records = new GlideRecord(tableName);
@@ -19,15 +22,49 @@
 		while (records.next()) {
 			task = taskConverter(records);
 
+			task.taskboard_source_table = tableName;
 			task.taskboard_assigned_to_me = records.assigned_to == taskboard.currentUser.getID();
 			task.taskboard_expedited = computeTaskExpedited(task);
 			task.taskboard_priority = computeTaskPriority(task);
 
-			boardKey = mapTaskToBoard(task);
+			tasks.push(task);
+		}
 
-			if (boardKey !== null) {
-				taskboard[boardKey].push(task);
+		return tasks;
+	}
+
+	function loadBoards(tasks) {
+		var ix, task, boardKey;
+
+		function mapTaskToBoard(task) {
+			if (task.state == "New") {
+				return null;
 			}
+			if (task.state == "Closed") {
+				return null;
+			}
+			if (task.state == "Closed/Resolved") {
+				return null;
+			}
+			if (!task.assigned_to) {
+				return 'todo';
+			}
+			if (task.state == "Resolved") {
+				return 'resolved';
+			}
+			if (task.state == "Pending Information") {
+				return 'resolved';
+			}
+			if (task.state == "Pending Vendor") {
+				return 'resolved';
+			}
+			return 'wip';
+		}
+
+		for (ix = 0; ix < tasks.length; ix++) {
+			task = tasks[ix];
+			boardKey = mapTaskToBoard(task);
+			taskboard[boardKey].push(task);
 		}
 	}
 
@@ -45,31 +82,6 @@
 			priority_number: record.priority.toString(),
 			state: record.state.getDisplayValue()
 		};
-	}
-
-	function mapTaskToBoard(task) {
-		if (task.state == "New") {
-			return null;
-		}
-		if (task.state == "Closed") {
-			return null;
-		}
-		if (task.state == "Closed/Resolved") {
-			return null;
-		}
-		if (!task.assigned_to) {
-			return 'todo';
-		}
-		if (task.state == "Resolved") {
-			return 'resolved';
-		}
-		if (task.state == "Pending Information") {
-			return 'resolved';
-		}
-		if (task.state == "Pending Vendor") {
-			return 'resolved';
-		}
-		return 'wip';
 	}
 
 	function computeTaskPriority(task) {
@@ -97,10 +109,6 @@
 		return !!task.short_description.match(/<\*>/);
 	}
 
-	function taskPriorityComparator(a, b) {
-		return b.taskboard_priority - a.taskboard_priority;
-	}
-
 	//noinspection JSUnusedLocalSymbols
 	function getMethodListing(javaObject) {
 		var output, javaClass, methods, methodsIx, method, params, paramsIx;
@@ -126,11 +134,17 @@
 		return output;
 	}
 
-	loadTasks("incident", defaultTaskConverter);
-	loadTasks("problem", defaultTaskConverter);
+	tasks = [];
+	tasks = tasks.concat(loadTasks("incident", defaultTaskConverter));
+	tasks = tasks.concat(loadTasks("problem", defaultTaskConverter));
+
+	loadBoards(tasks);
 
 	taskboard.boards.reset();
 	while (taskboard.boards.next()) {
-		taskboard[taskboard.boards.value().key].sort(taskPriorityComparator);
+		taskboard[taskboard.boards.value().key].sort(function (a, b) {
+			return b.taskboard_priority - a.taskboard_priority;
+		});
 	}
+
 }());
