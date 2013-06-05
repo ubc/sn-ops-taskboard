@@ -29,6 +29,10 @@ table.taskboard li.task {
 	border-top-width: 0;
 }
 
+table.taskboard li.task:hover {
+	background-color: #e6f2ff !important;
+}
+
 table.taskboard li.task.mine {
 	background-color: #ffffdf;
 }
@@ -50,6 +54,26 @@ table.taskboard li.task p.taskboard_priority {
 	float: right;
 	color: #999999;
 	font-size: 60%;
+}
+
+table.taskboard li.task p.priority {
+	float: right;
+	padding: 0.1em 1em;
+}
+table.taskboard li.task p.priority.priority_4 {
+	color: #7c9999;
+}
+table.taskboard li.task p.priority.priority_3 {
+	color: #808080;
+}
+table.taskboard li.task p.priority.priority_2 {
+	color: #000000;
+	background-color: #ffd080;
+}
+table.taskboard li.task p.priority.priority_1 {
+	color: #ffffff;
+	background-color: #ff0000;
+	font-weight: bold;
 }
 
 table.taskboard li.task a {
