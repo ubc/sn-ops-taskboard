@@ -18,7 +18,7 @@
 	Source code is available from https://github.com/ubc/sn-ops-taskboard
 	--&amp;gt;
 
-	<g:evaluate id="evaluate">
+	<g:evaluate id="evaluate" object="true" copyToPhase2="true">
 		<!-- evaluate.js will be included here -->
 	</g:evaluate>
 
@@ -35,20 +35,20 @@
 		<table class="taskboard">
 			<thead>
 				<tr>
-					${boards.reset()}
-					<j:while test="${boards.next()}">
-						<th>${boards.name()}</th>
+					${taskboard.reset()}
+					<j:while test="${taskboard.next()}">
+						<th>${taskboard.name()}</th>
 					</j:while>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					${boards.reset()}
-					<j:while test="${boards.next()}">
+					${taskboard.reset()}
+					<j:while test="${taskboard.next()}">
 						<td>
 							<ul>
-								<j2:while test="$[${boards.variable()}.next()]">
-									<g2:evaluate object="true">var task = ${boards.variable()}.value();</g2:evaluate>
+								<j2:while test="$[taskboard.${taskboard.key()}.next()]">
+									<g2:evaluate object="true">var task = taskboard.${taskboard.key()}.value();</g2:evaluate>
 									<g2:evaluate object="true">var taskClassMine = task.taskboard_assigned_to_me ? 'mine' : '';</g2:evaluate>
 									<g2:evaluate object="true">var taskClassExpedited = task.taskboard_expedited ? 'expedited' : '';</g2:evaluate>
 									<li class="task $[taskClassMine] $[taskClassExpedited]">

@@ -1,24 +1,30 @@
-var boards = (function () {
+var taskboard = (function () {
 	"use strict";
-	var boardVariables, boardNames, ix;
+	var object, boardKeys, boardNames, ix;
 
-	ix = -1;
-	boardVariables = ['todoBoard', 'wipBoard', 'resolvedBoard'];
+	boardKeys = ['todoBoard', 'wipBoard', 'resolvedBoard'];
 	boardNames = ['Unassigned', 'In Progress', 'Done'];
 
-	return {
+	object = {
 		next: function () {
 			ix += 1;
-			return ix < boardVariables.length;
+			return ix < boardKeys.length;
 		},
 		reset: function () {
 			ix = -1;
 		},
-		variable: function () {
-			return boardVariables[ix];
+		key: function () {
+			return boardKeys[ix];
 		},
 		name: function () {
 			return boardNames[ix];
 		}
 	};
+
+	for (ix = 0; ix < boardKeys.length; ix++) {
+		object[boardKeys[ix]] = [];
+	}
+
+	ix = -1;
+	return object;
 }());

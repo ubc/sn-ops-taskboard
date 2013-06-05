@@ -1,5 +1,4 @@
-/*global gs, GlideRecord */
-var todoBoard, wipBoard, resolvedBoard;
+/*global gs, GlideRecord, taskboard */
 
 (function () {
 	"use strict";
@@ -16,7 +15,7 @@ var todoBoard, wipBoard, resolvedBoard;
 
 	incidents = (function () {
 		function loadTasks() {
-			var incidentRecords, task, taskboard;
+			var incidentRecords, task, boardKey;
 
 			if (groups.isEmpty()) {
 				// No groups, no access
@@ -47,10 +46,10 @@ var todoBoard, wipBoard, resolvedBoard;
 				task.taskboard_expedited = computeTaskExpedited(task);
 				task.taskboard_priority = computeTaskPriority(task);
 
-				taskboard = getBoardForTask(task);
+				boardKey = getBoardForTask(task);
 
-				if (taskboard !== null) {
-					boards[taskboard].push(task);
+				if (boardKey) {
+					boards[boardKey].push(task);
 				}
 			}
 		}
@@ -62,7 +61,7 @@ var todoBoard, wipBoard, resolvedBoard;
 
 	problems = (function () {
 		function loadTasks() {
-			var problemRecords, task, taskboard;
+			var problemRecords, task, boardKey;
 
 			if (groups.isEmpty()) {
 				// No groups, no access
@@ -93,10 +92,10 @@ var todoBoard, wipBoard, resolvedBoard;
 				task.taskboard_expedited = computeTaskExpedited(task);
 				task.taskboard_priority = computeTaskPriority(task);
 
-				taskboard = getBoardForTask(task);
+				boardKey = getBoardForTask(task);
 
-				if (taskboard !== null) {
-					boards[taskboard].push(task);
+				if (boardKey !== null) {
+					boards[boardKey].push(task);
 				}
 			}
 		}
@@ -247,7 +246,7 @@ var todoBoard, wipBoard, resolvedBoard;
 	boards.wip.sort(taskPriorityComparator);
 	boards.resolved.sort(taskPriorityComparator);
 
-	todoBoard = makeIterableArray(boards.todo);
-	wipBoard = makeIterableArray(boards.wip);
-	resolvedBoard = makeIterableArray(boards.resolved);
+	taskboard.todoBoard = makeIterableArray(boards.todo);
+	taskboard.wipBoard = makeIterableArray(boards.wip);
+	taskboard.resolvedBoard = makeIterableArray(boards.resolved);
 }());
