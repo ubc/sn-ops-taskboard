@@ -1,102 +1,53 @@
-/*global gs, GlideRecord, taskboard */
+/*global GlideRecord, taskboard */
 
 (function () {
 	"use strict";
-	var incidents, problems;
 
-	incidents = (function () {
-		function loadTasks() {
-			var incidentRecords, task, boardKey;
+	function loadTasks(tableName, taskConverter) {
+		var records, task, boardKey;
 
-			if (taskboard.currentGroups.isEmpty()) {
-				// No groups, no access
-				return;
-			}
-
-			incidentRecords = new GlideRecord('incident');
-			incidentRecords.addActiveFilter();
-			incidentRecords.addQuery('assignment_group', taskboard.currentGroups);
-			incidentRecords.query();
-
-			while (incidentRecords.next()) {
-				task = {
-					link: incidentRecords.getLink(),
-					number: incidentRecords.number.toString(),
-					opened_at: incidentRecords.opened_at.toString(),
-					assigned_to: incidentRecords.assigned_to.getDisplayValue(),
-					assigned_to_link: incidentRecords.assigned_to.getRefRecord().getLink(),
-					caller_id: incidentRecords.caller_id.getDisplayValue(),
-					caller_id_link: incidentRecords.caller_id.getLink(),
-					short_description: incidentRecords.short_description.toString(),
-					priority: incidentRecords.priority.getDisplayValue(),
-					priority_number: incidentRecords.priority.toString(),
-					state: incidentRecords.state.getDisplayValue()
-				};
-
-				task.taskboard_assigned_to_me = incidentRecords.assigned_to == taskboard.currentUser.getID();
-				task.taskboard_expedited = computeTaskExpedited(task);
-				task.taskboard_priority = computeTaskPriority(task);
-
-				boardKey = getBoardForTask(task);
-
-				if (boardKey) {
-					taskboard[boardKey].push(task);
-				}
-			}
+		if (taskboard.currentGroups.isEmpty()) {
+			// No groups, no access
+			return;
 		}
 
-		return {
-			loadTasks: loadTasks
-		};
-	}());
+		records = new GlideRecord(tableName);
+		records.addActiveFilter();
+		records.addQuery('assignment_group', taskboard.currentGroups);
+		records.query();
 
-	problems = (function () {
-		function loadTasks() {
-			var problemRecords, task, boardKey;
+		while (records.next()) {
+			task = taskConverter(records);
 
-			if (taskboard.currentGroups.isEmpty()) {
-				// No groups, no access
-				return;
-			}
+			task.taskboard_assigned_to_me = records.assigned_to == taskboard.currentUser.getID();
+			task.taskboard_expedited = computeTaskExpedited(task);
+			task.taskboard_priority = computeTaskPriority(task);
 
-			problemRecords = new GlideRecord('problem');
-			problemRecords.addActiveFilter();
-			problemRecords.addQuery('assignment_group', taskboard.currentGroups);
-			problemRecords.query();
+			boardKey = mapTaskToBoard(task);
 
-			while (problemRecords.next()) {
-				task = {
-					link: problemRecords.getLink(),
-					number: problemRecords.number.toString(),
-					opened_at: problemRecords.opened_at.toString(),
-					assigned_to: problemRecords.assigned_to.getDisplayValue(),
-					assigned_to_link: problemRecords.assigned_to.getRefRecord().getLink(),
-					caller_id: problemRecords.caller_id.getDisplayValue(),
-					caller_id_link: problemRecords.caller_id.getLink(),
-					short_description: problemRecords.short_description.toString(),
-					priority: problemRecords.priority.getDisplayValue(),
-					priority_number: problemRecords.priority.toString(),
-					state: problemRecords.state.getDisplayValue()
-				};
-
-				task.taskboard_assigned_to_me = problemRecords.assigned_to == taskboard.currentUser.getID();
-				task.taskboard_expedited = computeTaskExpedited(task);
-				task.taskboard_priority = computeTaskPriority(task);
-
-				boardKey = getBoardForTask(task);
-
-				if (boardKey !== null) {
-					taskboard[boardKey].push(task);
-				}
+			if (boardKey !== null) {
+				taskboard[boardKey].push(task);
 			}
 		}
+	}
 
+	function defaultTaskConverter(record) {
 		return {
-			loadTasks: loadTasks
+			link: record.getLink(),
+			number: record.number.toString(),
+			opened_at: record.opened_at.toString(),
+			assigned_to: record.assigned_to.getDisplayValue(),
+			assigned_to_link: record.assigned_to.getRefRecord().getLink(),
+			caller_id: record.caller_id.getDisplayValue(),
+			caller_id_link: record.caller_id.getLink(),
+			short_description: record.short_description.toString(),
+			priority: record.priority.getDisplayValue(),
+			priority_number: record.priority.toString(),
+			state: record.state.getDisplayValue()
 		};
-	}());
+	}
 
-	function getBoardForTask(task) {
+	function mapTaskToBoard(task) {
 		if (task.state == "New") {
 			return null;
 		}
@@ -150,6 +101,7 @@
 		return b.taskboard_priority - a.taskboard_priority;
 	}
 
+	//noinspection JSUnusedLocalSymbols
 	function getMethodListing(javaObject) {
 		var output, javaClass, methods, methodsIx, method, params, paramsIx;
 
@@ -174,8 +126,8 @@
 		return output;
 	}
 
-	incidents.loadTasks();
-	problems.loadTasks();
+	loadTasks("incident", defaultTaskConverter);
+	loadTasks("problem", defaultTaskConverter);
 
 	taskboard.boards.reset();
 	while (taskboard.boards.next()) {
