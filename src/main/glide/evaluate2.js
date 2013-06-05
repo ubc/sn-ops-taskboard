@@ -2,23 +2,20 @@
 
 (function () {
 	"use strict";
-	var user, groups, incidents, problems;
-
-	user = taskboard.currentUser;
-	groups = taskboard.currentGroups;
+	var incidents, problems;
 
 	incidents = (function () {
 		function loadTasks() {
 			var incidentRecords, task, boardKey;
 
-			if (groups.isEmpty()) {
+			if (taskboard.currentGroups.isEmpty()) {
 				// No groups, no access
 				return;
 			}
 
 			incidentRecords = new GlideRecord('incident');
 			incidentRecords.addActiveFilter();
-			incidentRecords.addQuery('assignment_group', groups);
+			incidentRecords.addQuery('assignment_group', taskboard.currentGroups);
 			incidentRecords.query();
 
 			while (incidentRecords.next()) {
@@ -36,7 +33,7 @@
 					state: incidentRecords.state.getDisplayValue()
 				};
 
-				task.taskboard_assigned_to_me = incidentRecords.assigned_to == user.getID();
+				task.taskboard_assigned_to_me = incidentRecords.assigned_to == taskboard.currentUser.getID();
 				task.taskboard_expedited = computeTaskExpedited(task);
 				task.taskboard_priority = computeTaskPriority(task);
 
@@ -57,14 +54,14 @@
 		function loadTasks() {
 			var problemRecords, task, boardKey;
 
-			if (groups.isEmpty()) {
+			if (taskboard.currentGroups.isEmpty()) {
 				// No groups, no access
 				return;
 			}
 
 			problemRecords = new GlideRecord('problem');
 			problemRecords.addActiveFilter();
-			problemRecords.addQuery('assignment_group', groups);
+			problemRecords.addQuery('assignment_group', taskboard.currentGroups);
 			problemRecords.query();
 
 			while (problemRecords.next()) {
@@ -82,7 +79,7 @@
 					state: problemRecords.state.getDisplayValue()
 				};
 
-				task.taskboard_assigned_to_me = problemRecords.assigned_to == user.getID();
+				task.taskboard_assigned_to_me = problemRecords.assigned_to == taskboard.currentUser.getID();
 				task.taskboard_expedited = computeTaskExpedited(task);
 				task.taskboard_priority = computeTaskPriority(task);
 
