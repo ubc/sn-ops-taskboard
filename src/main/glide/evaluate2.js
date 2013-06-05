@@ -1,5 +1,5 @@
 /*global gs, GlideRecord */
-var ok, todoBoard, wipBoard, resolvedBoard;
+var todoBoard, wipBoard, resolvedBoard;
 
 (function () {
 	"use strict";
@@ -250,6 +250,4 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 	todoBoard = makeIterableArray(boards.todo);
 	wipBoard = makeIterableArray(boards.wip);
 	resolvedBoard = makeIterableArray(boards.resolved);
-
-	ok = 1;
 }());
