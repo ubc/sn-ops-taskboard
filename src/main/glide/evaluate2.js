@@ -15,23 +15,6 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 	};
 
 	incidents = (function () {
-
-		function getBoardForTask(task) {
-			if (task.state == "New") {
-				return null;
-			}
-			if (task.state == "Closed") {
-				return null;
-			}
-			if (!task.assigned_to) {
-				return 'todo';
-			}
-			if (task.state == "Resolved") {
-				return 'resolved';
-			}
-			return 'wip';
-		}
-
 		function loadTasks() {
 			var incidentRecords, task, taskboard;
 
@@ -78,23 +61,6 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 	}());
 
 	problems = (function () {
-
-		function getBoardForTask(task) {
-			if (task.state == "New") {
-				return null;
-			}
-			if (task.state == "Closed") {
-				return null;
-			}
-			if (!task.assigned_to) {
-				return 'todo';
-			}
-			if (task.state == "Resolved") {
-				return 'resolved';
-			}
-			return 'wip';
-		}
-
 		function loadTasks() {
 			var problemRecords, task, taskboard;
 
@@ -194,6 +160,31 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 			object: object,
 			keys: makeIterableArray(keys)
 		};
+	}
+
+	function getBoardForTask(task) {
+		if (task.state == "New") {
+			return null;
+		}
+		if (task.state == "Closed") {
+			return null;
+		}
+		if (task.state == "Closed/Resolved") {
+			return null;
+		}
+		if (!task.assigned_to) {
+			return 'todo';
+		}
+		if (task.state == "Resolved") {
+			return 'resolved';
+		}
+		if (task.state == "Pending Information") {
+			return 'resolved';
+		}
+		if (task.state == "Pending Vendor") {
+			return 'resolved';
+		}
+		return 'wip';
 	}
 
 	function computeTaskPriority(task) {

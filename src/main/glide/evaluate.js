@@ -4,7 +4,7 @@ var boards = (function () {
 
 	ix = -1;
 	boardVariables = ['todoBoard', 'wipBoard', 'resolvedBoard'];
-	boardNames = ['To Do', 'In Progress', 'Resolved'];
+	boardNames = ['Unassigned', 'In Progress', 'Done'];
 
 	return {
 		next: function () {
