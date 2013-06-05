@@ -43,7 +43,7 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 					state: incidentRecords.state.getDisplayValue()
 				};
 
-				task.taskboard_my_task = incidentRecords.assigned_to == user.getID();
+				task.taskboard_assigned_to_me = incidentRecords.assigned_to == user.getID();
 				task.taskboard_expedited = computeTaskExpedited(task);
 				task.taskboard_priority = computeTaskPriority(task);
 
@@ -89,7 +89,7 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 					state: problemRecords.state.getDisplayValue(),
 				};
 
-				task.taskboard_my_task = problemRecords.assigned_to == user.getID();
+				task.taskboard_assigned_to_me = problemRecords.assigned_to == user.getID();
 				task.taskboard_expedited = computeTaskExpedited(task);
 				task.taskboard_priority = computeTaskPriority(task);
 
@@ -190,7 +190,7 @@ var ok, todoBoard, wipBoard, resolvedBoard;
 	function computeTaskPriority(task) {
 		var assignedToScore, priorityScore, expeditedScore, openedAtParsed, openedAtDate, ageScore;
 
-		assignedToScore = 0; // task.taskboard_my_task ? 1000000 : 0;
+		assignedToScore = 0; // task.taskboard_assigned_to_me ? 1000000 : 0;
 		expeditedScore = task.taskboard_expedited ? 1000000 : 0;
 
 		priorityScore = (4 - task.priority_number) * 10000;
