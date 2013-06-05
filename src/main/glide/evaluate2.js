@@ -53,34 +53,6 @@
 		return tasks;
 	}
 
-	function pushInExpeditedFlag(task) {
-		var magic = "<*>";
-
-		if (task.short_description.indexOf(magic) > -1) {
-			task.taskboard_priority += 1000000;
-			task.taskboard_expedited = true;
-			task.short_description = task.short_description.replace(magic,  "");
-		}
-	}
-
-	function pushInCustomTaskTypeFlag(task) {
-		if (task.taskboard_source_table == "incident") {
-			if (task.incident_type == "Request") {
-				task.taskboard_type = "request";
-				if (task.short_description.match(/^TASK - /)) {
-					task.taskboard_type = "task";
-					task.short_description = task.short_description.substr(7);
-				}
-			}
-			if (task.incident_type == "Incident") {
-				if (task.short_description.match(/^EVENT - /)) {
-					task.taskboard_type = "event";
-					task.short_description = task.short_description.substr(8);
-				}
-			}
-		}
-	}
-
 	function baseTaskConverter(record) {
 		return {
 			link: record.getLink(),
@@ -105,6 +77,34 @@
 
 	function postProcessTasks(tasks) {
 		var ix, task;
+
+		function pushInExpeditedFlag(task) {
+			var magic = "<*>";
+
+			if (task.short_description.indexOf(magic) > -1) {
+				task.taskboard_priority += 1000000;
+				task.taskboard_expedited = true;
+				task.short_description = task.short_description.replace(magic, "");
+			}
+		}
+
+		function pushInCustomTaskTypeFlag(task) {
+			if (task.taskboard_source_table == "incident") {
+				if (task.incident_type == "Request") {
+					task.taskboard_type = "request";
+					if (task.short_description.match(/^TASK - /)) {
+						task.taskboard_type = "task";
+						task.short_description = task.short_description.substr(7);
+					}
+				}
+				if (task.incident_type == "Incident") {
+					if (task.short_description.match(/^EVENT - /)) {
+						task.taskboard_type = "event";
+						task.short_description = task.short_description.substr(8);
+					}
+				}
+			}
+		}
 
 		for (ix = 0; ix < tasks.length; ix++) {
 			task = tasks[ix];
