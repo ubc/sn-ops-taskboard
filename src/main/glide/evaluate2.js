@@ -34,9 +34,9 @@
 			} else {
 				openedAtDate = new Date();
 			}
-			ageScore = (new Date().getTime() - openedAtDate.getTime()) / 86400 / 1000 * 10; // (Ten points per day)
+			ageScore = (new Date().getTime() - openedAtDate.getTime()) / 86400000; // (days from milliseconds)
 
-			return Math.round(assignedToScore + priorityScore + ageScore);
+			return assignedToScore + priorityScore + ageScore;
 		}
 
 		while (records.next()) {
