@@ -17,31 +17,12 @@
 		records.addQuery('assignment_group', taskboard.currentGroups);
 		records.query();
 
-		function computeTaskPriority(task) {
-			var priorityScore, openedAtParsed, openedAtDate, ageScore;
-
-			priorityScore = (4 - task.priority_number) * 10000;
-
-			// Date.parse seems to produce NaN no matter what.
-			// Note that opened_at is actually in the caller's time zone. This can lead to scores that are off by up to one day.
-			openedAtParsed = task.opened_at.match(/^(\d{4})-(\d{2})-(\d{2})\D(\d{2}):(\d{2}):(\d{2})/m);
-			if (openedAtParsed[6] !== undefined) {
-				openedAtDate = new Date(openedAtParsed[1], openedAtParsed[2] - 1, openedAtParsed[3], openedAtParsed[4], openedAtParsed[5], openedAtParsed[6]);
-			} else {
-				openedAtDate = new Date();
-			}
-			ageScore = (new Date().getTime() - openedAtDate.getTime()) / 86400000; // (days from milliseconds)
-
-			return priorityScore + ageScore;
-		}
-
 		while (records.next()) {
 			task = taskConverter(records);
 
 			task.taskboard_type = tableName;
 			task.taskboard_source_table = tableName;
 			task.taskboard_assigned_to_me = records.assigned_to == taskboard.currentUser.getID();
-			task.taskboard_priority = computeTaskPriority(task);
 
 			tasks.push(task);
 		}
@@ -100,10 +81,29 @@
 			}
 		}
 
+		function pushInComputedTaskPriority(task) {
+			var priorityScore, openedAtParsed, openedAtDate, ageScore;
+
+			priorityScore = (4 - task.priority_number) * 10000;
+
+			// Date.parse seems to produce NaN no matter what.
+			// Note that opened_at is actually in the caller's time zone. This can lead to scores that are off by up to one day.
+			openedAtParsed = task.opened_at.match(/^(\d{4})-(\d{2})-(\d{2})\D(\d{2}):(\d{2}):(\d{2})/m);
+			if (openedAtParsed[6] !== undefined) {
+				openedAtDate = new Date(openedAtParsed[1], openedAtParsed[2] - 1, openedAtParsed[3], openedAtParsed[4], openedAtParsed[5], openedAtParsed[6]);
+			} else {
+				openedAtDate = new Date();
+			}
+			ageScore = (new Date().getTime() - openedAtDate.getTime()) / 86400000; // (days from milliseconds)
+
+			task.taskboard_priority = priorityScore + ageScore;
+		}
+
 		for (ix = 0; ix < tasks.length; ix++) {
 			task = tasks[ix];
-			pushInExpeditedFlag(task);
 			pushInCustomTaskTypeFlag(task);
+			pushInComputedTaskPriority(task);
+			pushInExpeditedFlag(task);
 		}
 	}
 
