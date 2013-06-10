@@ -4,14 +4,12 @@
 	"use strict";
 	var tasks;
 
-	function loadTasks(tableName, taskConverter) {
-		var tasks, records, task;
-
-		tasks = [];
+	function loadTasks(tableName, tasks, taskConverter) {
+		var records, task;
 
 		if (taskboard.currentGroups.isEmpty()) {
 			// No groups, no access
-			return tasks;
+			return;
 		}
 
 		records = new GlideRecord(tableName);
@@ -49,8 +47,6 @@
 
 			tasks.push(task);
 		}
-
-		return tasks;
 	}
 
 	function baseTaskConverter(record) {
@@ -174,8 +170,8 @@
 	}
 
 	tasks = [];
-	tasks = tasks.concat(loadTasks("incident", incidentTaskConverter));
-	tasks = tasks.concat(loadTasks("problem", baseTaskConverter));
+	loadTasks("incident", tasks, incidentTaskConverter);
+	loadTasks("problem", tasks, baseTaskConverter);
 
 	postProcessTasks(tasks);
 	loadBoards(tasks);
