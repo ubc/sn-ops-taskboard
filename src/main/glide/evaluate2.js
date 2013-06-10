@@ -18,9 +18,7 @@
 		records.query();
 
 		function computeTaskPriority(task) {
-			var assignedToScore, priorityScore, openedAtParsed, openedAtDate, ageScore;
-
-			assignedToScore = 0; // task.taskboard_assigned_to_me ? 1000000 : 0;
+			var priorityScore, openedAtParsed, openedAtDate, ageScore;
 
 			priorityScore = (4 - task.priority_number) * 10000;
 
@@ -34,7 +32,7 @@
 			}
 			ageScore = (new Date().getTime() - openedAtDate.getTime()) / 86400000; // (days from milliseconds)
 
-			return assignedToScore + priorityScore + ageScore;
+			return priorityScore + ageScore;
 		}
 
 		while (records.next()) {
