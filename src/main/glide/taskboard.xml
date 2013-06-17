@@ -37,7 +37,7 @@
 				<tr>
 					${taskboard.boards.reset()}
 					<j:while test="${taskboard.boards.next()}">
-						<th>${taskboard.boards.value().name}</th>
+						<th>${taskboard.boards.value().name} ($[taskboard.${taskboard.boards.value().key}.length.toString()])</th>
 					</j:while>
 				</tr>
 			</thead>
