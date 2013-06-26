@@ -8,7 +8,7 @@ table.taskboard th {
 	width: 10%;
 	min-width: 15em;
 	background-color: #eeeeff;
-	border: 1px solid #eeeeff;
+	border: 1px solid #bbbbff;
 }
 
 table.taskboard td {
@@ -38,7 +38,7 @@ table.taskboard li.task.mine {
 }
 
 table.taskboard li.task.expedited {
-	background-color: #ffd0d0;
+	background-color: #ffe6e6;
 }
 
 table.taskboard li.task div {
@@ -53,7 +53,8 @@ table.taskboard li.task p {
 table.taskboard li.task p.task_type {
 	float: right;
 	clear: right;
-	padding: 0.1em 1em;
+	padding: 0 0.5em;
+	margin: 0.1em 0;
 	text-transform: capitalize;
 }
 
@@ -68,13 +69,14 @@ table.taskboard li.task p.taskboard_priority {
 table.taskboard li.task p.priority {
 	float: right;
 	clear: right;
-	padding: 0.1em 1em;
+	padding: 0.1em 0.5em;
+	margin: 0.1em 0;
 }
 table.taskboard li.task.priority_4 p.priority {
 	color: #7c9999;
 }
 table.taskboard li.task.priority_3 p.priority {
-	color: #808080;
+	color: #4d4d4d;
 }
 table.taskboard li.task.priority_2 p.priority {
 	color: #000000;
