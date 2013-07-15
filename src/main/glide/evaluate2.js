@@ -126,7 +126,19 @@
 			if (task.state == "Resolved") {
 				return 'resolved';
 			}
+			if (task.state == "Pending Change") {
+				return 'resolved';
+			}
 			if (task.state == "Pending Information") {
+				return 'resolved';
+			}
+			if (task.state == "Pending Parts") {
+				return 'resolved';
+			}
+			if (task.state == "Pending Recovery") {
+				return 'resolved';
+			}
+			if (task.state == "Pending Schedule") {
 				return 'resolved';
 			}
 			if (task.state == "Pending Vendor") {
