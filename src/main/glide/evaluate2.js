@@ -30,7 +30,7 @@
 
 	function baseTaskConverter(record) {
 		return {
-			link: record.getLink(),
+			link: record.getLink(true),
 			number: record.number.toString(),
 			opened_at: record.opened_at.toString(),
 			assigned_to: record.assigned_to.getDisplayValue(),
