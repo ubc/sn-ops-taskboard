@@ -34,7 +34,7 @@ table.taskboard li.task:hover {
 }
 
 table.taskboard li.task.mine {
-	background-color: #ffffcc;
+	background-color: #ffffb6;
 }
 
 table.taskboard li.task.expedited {
