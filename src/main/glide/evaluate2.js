@@ -84,7 +84,7 @@
 		function pushInComputedTaskPriority(task) {
 			var priorityScore, openedAtParsed, openedAtDate, ageScore;
 
-			priorityScore = (4 - task.priority_number) * 10000;
+			priorityScore = (4 - task.priority_number) * 7;
 
 			// Date.parse seems to produce NaN no matter what.
 			// Note that opened_at is actually in the caller's time zone. This can lead to scores that are off by up to one day.
