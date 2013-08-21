@@ -2,18 +2,32 @@ table.taskboard {
 	width: 100%;
 	border-spacing: 1.25em 0;
 	border-collapse: separate;
+	background-color: #ffffff;
 }
 
-table.taskboard th {
+table.taskboard tr.board_header th {
 	width: 10%;
 	min-width: 15em;
+	padding-top: 0.75em;
+	font-size: 125%;
+}
+
+table.taskboard tr.board_header div {
 	background-color: #eeeeff;
 	border: 1px solid #bbbbff;
+}
+
+table.taskboard tr.lane_header th {
+	font-size: 115%;
+	border-top: 1.25em solid white;
+	border-bottom: 2px solid black;
+	text-align: left;
 }
 
 table.taskboard td {
 	vertical-align: top;
 	padding: 0;
+	border-top: 0.75em solid #ffffff;
 }
 
 table.taskboard ul {
@@ -26,7 +40,11 @@ table.taskboard li.task {
 	margin: 0;
 	padding: 0.25em 0.5em;
 	border: 1px solid #bbbbff;
-	border-top-width: 0;
+	border-top-style: none;
+}
+
+table.taskboard li.task:first-child {
+	border-top-style: solid;
 }
 
 table.taskboard li.task:hover {
@@ -64,6 +82,14 @@ table.taskboard li.task p.task_type {
 }
 
 table.taskboard li.task p.taskboard_priority {
+	display: none;
+	float: right;
+	clear: right;
+	color: #666666;
+	font-size: 60%;
+}
+
+table.taskboard li.task p.task_age {
 	display: none;
 	float: right;
 	clear: right;

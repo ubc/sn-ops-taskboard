@@ -114,10 +114,10 @@
 		}
 	}
 
-	function loadBoards(tasks) {
-		var ix, task, boardKey;
+	function loadColumns(tasks) {
+		var ix, task, columnKey, laneKey;
 
-		function mapTaskToBoard(task) {
+		function mapTaskToColumn(task) {
 			if (task.state == "New") {
 				return null;
 			}
@@ -154,10 +154,19 @@
 			return 'wip';
 		}
 
+		function mapTaskToLane(task) {
+			if (task.taskboard_type == "task") {
+				return "internal";
+			}
+			return "external";
+		}
+
 		for (ix = 0; ix < tasks.length; ix++) {
 			task = tasks[ix];
-			boardKey = mapTaskToBoard(task);
-			taskboard[boardKey].push(task);
+			columnKey = mapTaskToColumn(task);
+			laneKey = mapTaskToLane(task);
+			taskboard[columnKey].push(task);
+			taskboard[columnKey + ":" + laneKey].push(task);
 		}
 	}
 
@@ -186,18 +195,24 @@
 		return output;
 	}
 
+	function prioritySort(a, b) {
+		return b.taskboard_priority - a.taskboard_priority;
+	}
+
 	tasks = [];
 	loadTasks("incident", tasks, incidentTaskConverter);
 	loadTasks("problem", tasks, baseTaskConverter);
 
 	postProcessTasks(tasks);
-	loadBoards(tasks);
+	loadColumns(tasks);
 
-	taskboard.boards.reset();
-	while (taskboard.boards.next()) {
-		taskboard[taskboard.boards.value().key].sort(function (a, b) {
-			return b.taskboard_priority - a.taskboard_priority;
-		});
+	taskboard.columns.reset();
+	while (taskboard.columns.next()) {
+		taskboard.lanes.reset();
+		taskboard[taskboard.columns.value().key].sort(prioritySort);
+		while (taskboard.lanes.next()) {
+			taskboard[taskboard.columns.value().key + ":" + taskboard.lanes.value().key].sort(prioritySort);
+		}
 	}
 
 }());

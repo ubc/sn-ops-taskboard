@@ -6,10 +6,15 @@ var taskboard = (function () {
 
 	object = {};
 
-	object.boards = [
+	object.columns = [
 		{ key: 'todo', name: 'Unassigned' },
 		{ key: 'wip', name: 'In Progress' },
 		{ key: 'resolved', name: 'Done' }
+	];
+
+	object.lanes = [
+		{ key: "external", name: "Service operation" },
+		{ key: "internal", name: "Improvement" }
 	];
 
 	object.currentUser = gs.getUser();
@@ -38,10 +43,16 @@ var taskboard = (function () {
 		return array;
 	}
 
-	makeArrayIterable(object.boards);
+	makeArrayIterable(object.columns);
+	makeArrayIterable(object.lanes);
 
-	while (object.boards.next()) {
-		object[object.boards.value().key] = makeArrayIterable([]);
+	object.columns.reset();
+	while (object.columns.next()) {
+		object.lanes.reset();
+		object[object.columns.value().key] = makeArrayIterable([]);
+		while (object.lanes.next()) {
+			object[object.columns.value().key + ":" + object.lanes.value().key] = makeArrayIterable([]);
+		}
 	}
 
 	return object;
