@@ -50,7 +50,7 @@ table.taskboard li.task p {
 	padding: 0;
 }
 
-table.taskboard li.task.old span.number a {
+table.taskboard li.task.old a.number {
 	font-weight: bold;
 	color: #000066;
 }

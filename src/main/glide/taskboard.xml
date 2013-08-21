@@ -58,7 +58,7 @@
 										<p class="task_type">$[task.taskboard_type]</p>
 										<p class="taskboard_priority">$[task.taskboard_priority]</p>
 										<p>
-											<span class="number"><a class="linked formlink" href="$[task.link]">$[task.number]</a></span>
+											<span class="number"><a class="linked formlink number" href="$[task.link]">$[task.number]</a></span>
 											<j2:if test="$[!!task.caller_id]">
 												(<span class="caller_id"><a class="linked formlink" href="$[task.caller_id_link]">$[task.caller_id]</a></span>)
 											</j2:if>
