@@ -118,39 +118,17 @@
 		var ix, task, columnKey, laneKey;
 
 		function mapTaskToColumn(task) {
-			if (task.state == "New") {
-				return null;
-			}
-			if (task.state == "Closed") {
-				return null;
-			}
-			if (task.state == "Closed/Resolved") {
-				return null;
-			}
-			if (!task.assigned_to) {
-				return 'todo';
-			}
-			if (task.state == "Resolved") {
-				return 'resolved';
-			}
-			if (task.state == "Pending Change") {
-				return 'resolved';
-			}
-			if (task.state == "Pending Information") {
-				return 'resolved';
-			}
-			if (task.state == "Pending Parts") {
-				return 'resolved';
-			}
-			if (task.state == "Pending Recovery") {
-				return 'resolved';
-			}
-			if (task.state == "Pending Schedule") {
-				return 'resolved';
-			}
-			if (task.state == "Pending Vendor") {
-				return 'resolved';
-			}
+			if (task.state == "New")                                    return null;
+			if (task.state == "Closed")                                 return null;
+			if (task.state == "Closed/Resolved")                        return null;
+			if (!task.assigned_to)                                      return 'todo';
+			if (task.state == "Resolved")                               return 'resolved';
+			if (task.state == "Pending Change")                         return 'resolved';
+			if (task.state == "Pending Information")                    return 'resolved';
+			if (task.state == "Pending Parts")                          return 'resolved';
+			if (task.state == "Pending Recovery")                       return 'resolved';
+			if (task.state == "Pending Schedule")                       return 'resolved';
+			if (task.state == "Pending Vendor")                         return 'resolved';
 			return 'wip';
 		}
 
