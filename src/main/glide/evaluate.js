@@ -9,6 +9,7 @@ var taskboard = (function () {
 	object.columns = [
 		{ key: 'todo', name: 'Unassigned' },
 		{ key: 'wip', name: 'In Progress' },
+		{ key: 'pending', name: 'Pending' },
 		{ key: 'resolved', name: 'Done' }
 	];
 
