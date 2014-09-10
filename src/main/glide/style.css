@@ -52,11 +52,11 @@ table.taskboard li.task:hover {
 }
 
 table.taskboard li.task.mine {
-	background-color: #ffffb6;
+	background-color: #ffffd3;
 }
 
 table.taskboard li.task.expedited {
-	background-color: #ffe6e6;
+	background-color: #ffefef;
 }
 
 table.taskboard li.task div {
@@ -71,6 +71,10 @@ table.taskboard li.task p {
 table.taskboard li.task.old a.number {
 	font-weight: bold;
 	color: #000066;
+}
+
+table.taskboard li.task.updated a.number {
+	background-color: #ffff00;
 }
 
 table.taskboard li.task p.task_type {

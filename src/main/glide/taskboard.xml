@@ -59,7 +59,8 @@
 										<g2:evaluate object="true">var taskClassOld = task.taskboard_age > 7 ? 'old' : '';</g2:evaluate>
 										<g2:evaluate object="true">var taskClassMine = task.taskboard_assigned_to_me ? 'mine' : '';</g2:evaluate>
 										<g2:evaluate object="true">var taskClassExpedited = task.taskboard_expedited ? 'expedited' : '';</g2:evaluate>
-										<li class="task task_$[task.taskboard_type] priority_$[task.priority_number] $[taskClassOld] $[taskClassMine] $[taskClassExpedited]">
+										<g2:evaluate object="true">var taskClassUpdated = task.updated ? 'updated' : '';</g2:evaluate>
+										<li class="task task_$[task.taskboard_type] priority_$[task.priority_number] $[taskClassOld] $[taskClassMine] $[taskClassExpedited] $[taskClassUpdated]">
 											<p class="priority">$[task.priority]</p>
 											<p class="task_type">$[task.taskboard_type]</p>
 											<p class="taskboard_priority">$[task.taskboard_priority]</p>

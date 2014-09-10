@@ -40,7 +40,8 @@
 			short_description: record.short_description.toString(),
 			priority: record.priority.getDisplayValue(),
 			priority_number: record.priority.toString(),
-			state: record.state.getDisplayValue()
+			state: record.state.getDisplayValue(),
+			updated: record.u_user_updates_flag.toString() == "true",
 		};
 	}
 
