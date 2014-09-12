@@ -32,60 +32,81 @@
 			<!-- style.css will be included here -->
 		</style>
 
-		<table class="taskboard">
-			<thead>
-				<tr class="board_header">
-					${taskboard.columns.reset()}
-					<j:while test="${taskboard.columns.next()}">
-						<th><div>${taskboard.columns.value().name} ($[taskboard.${taskboard.columns.value().key}.length.toString()])</div></th>
-					</j:while>
-				</tr>
-			</thead>
-			<tbody>
-				${taskboard.lanes.reset()}
-				<j:while test="${taskboard.lanes.next()}">
-					<tr class="lane_header">
-						<th colspan="${taskboard.columns.length}">${taskboard.lanes.value().name}</th>
-					</tr>
-					<tr>
+		<j2:if test="$[taskboard.displayMultiGroupMessage]">
+			<div class="message">
+				<p>You belong to multiple groups. In order to avoid timeouts,
+					this content block now only displays groups that are
+					listed explicitly. To select the groups to display on this
+					home page, please include those group names in the title
+					of the page.
+				</p>
+				<p>Current page title: $[taskboard.getHomePageTitle()]</p>
+				<p>Your group names:</p>
+				<ul>
+					<j2:forEach var="jvar_group" items="$[taskboard.getCurrentGroupNames()]">
+						<li>$[jvar_group]</li>
+					</j2:forEach>
+				</ul>
+			</div>
+		</j2:if>
+
+		<j2:if test="$[taskboard.displayTaskBoard]">
+			<table class="taskboard">
+				<thead>
+					<tr class="board_header">
 						${taskboard.columns.reset()}
 						<j:while test="${taskboard.columns.next()}">
-							<g2:evaluate object="false">var columnLaneKey = "${taskboard.columns.value().key}:${taskboard.lanes.value().key}";</g2:evaluate>
-							<g2:evaluate object="true">var section = taskboard[columnLaneKey];</g2:evaluate>
-							<td>
-								<ul>
-									<j2:while test="$[section.next()]">
-										<g2:evaluate object="true">var task = section.value();</g2:evaluate>
-										<g2:evaluate object="true">var taskClassOld = task.taskboard_age > 7 ? 'old' : '';</g2:evaluate>
-										<g2:evaluate object="true">var taskClassMine = task.taskboard_assigned_to_me ? 'mine' : '';</g2:evaluate>
-										<g2:evaluate object="true">var taskClassExpedited = task.taskboard_expedited ? 'expedited' : '';</g2:evaluate>
-										<g2:evaluate object="true">var taskClassUpdated = task.updated ? 'updated' : '';</g2:evaluate>
-										<li class="task task_$[task.taskboard_type] priority_$[task.priority_number] $[taskClassOld] $[taskClassMine] $[taskClassExpedited] $[taskClassUpdated]">
-											<p class="priority">$[task.priority]</p>
-											<p class="task_type">$[task.taskboard_type]</p>
-											<p class="taskboard_priority">$[task.taskboard_priority]</p>
-											<p class="task_age">$[task.taskboard_age]</p>
-											<p>
-												<span class="number"><a class="linked formlink number" href="$[task.link]">$[task.number]</a></span>
-												<j2:if test="$[!!task.caller_id]">
-													(<span class="caller_id"><a class="linked formlink" href="$[task.caller_id_link]">$[task.caller_id]</a></span>)
-												</j2:if>
-											</p>
-											<p class="short_description">$[task.short_description]</p>
-											<p>
-												<span class="state">$[task.state]</span>
-												<j2:if test="$[!!task.assigned_to]">
-													- <span class="assigned_to"><a class="linked formlink" href="$[task.assigned_to_link]">$[task.assigned_to]</a></span>
-												</j2:if>
-											</p>
-										</li>
-									</j2:while>
-								</ul>
-							</td>
+							<th><div>${taskboard.columns.value().name} ($[taskboard.${taskboard.columns.value().key}.length.toString()])</div></th>
 						</j:while>
 					</tr>
-				</j:while>
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					${taskboard.lanes.reset()}
+					<j:while test="${taskboard.lanes.next()}">
+						<tr class="lane_header">
+							<th colspan="${taskboard.columns.length}">${taskboard.lanes.value().name}</th>
+						</tr>
+						<tr>
+							${taskboard.columns.reset()}
+							<j:while test="${taskboard.columns.next()}">
+								<g2:evaluate object="false">var columnLaneKey = "${taskboard.columns.value().key}:${taskboard.lanes.value().key}";</g2:evaluate>
+								<g2:evaluate object="true">var section = taskboard[columnLaneKey];</g2:evaluate>
+								<td>
+									<ul>
+										<j2:while test="$[section.next()]">
+											<g2:evaluate object="true">var task = section.value();</g2:evaluate>
+											<g2:evaluate object="true">var taskClassOld = task.taskboard_age > 7 ? 'old' : '';</g2:evaluate>
+											<g2:evaluate object="true">var taskClassMine = task.taskboard_assigned_to_me ? 'mine' : '';</g2:evaluate>
+											<g2:evaluate object="true">var taskClassExpedited = task.taskboard_expedited ? 'expedited' : '';</g2:evaluate>
+											<g2:evaluate object="true">var taskClassUpdated = task.updated ? 'updated' : '';</g2:evaluate>
+											<li class="task task_$[task.taskboard_type] priority_$[task.priority_number] $[taskClassOld] $[taskClassMine] $[taskClassExpedited] $[taskClassUpdated]">
+												<p class="priority">$[task.priority]</p>
+												<p class="task_type">$[task.taskboard_type]</p>
+												<p class="taskboard_priority">$[task.taskboard_priority]</p>
+												<p class="task_age">$[task.taskboard_age]</p>
+												<p>
+													<span class="number"><a class="linked formlink number" href="$[task.link]">$[task.number]</a></span>
+													<j2:if test="$[!!task.caller_id]">
+														(<span class="caller_id"><a class="linked formlink" href="$[task.caller_id_link]">$[task.caller_id]</a></span>)
+													</j2:if>
+												</p>
+												<p class="short_description">$[task.short_description]</p>
+												<p>
+													<span class="state">$[task.state]</span>
+													<j2:if test="$[!!task.assigned_to]">
+														- <span class="assigned_to"><a class="linked formlink" href="$[task.assigned_to_link]">$[task.assigned_to]</a></span>
+													</j2:if>
+												</p>
+											</li>
+										</j2:while>
+									</ul>
+								</td>
+							</j:while>
+						</tr>
+					</j:while>
+				</tbody>
+			</table>
+		</j2:if>
+
 	</div>
 </j:jelly>

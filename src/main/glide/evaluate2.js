@@ -2,19 +2,19 @@
 
 (function () {
 	"use strict";
-	var tasks;
+	var tasks, groups;
 
-	function loadTasks(tableName, tasks, taskConverter) {
+	function loadTasks(tableName, tasks, groups, taskConverter) {
 		var records, task;
 
-		if (taskboard.currentGroups.isEmpty()) {
+		if (typeof groups == "undefined" || groups.length == 0) {
 			// No groups, no access
 			return;
 		}
 
 		records = new GlideRecord(tableName);
 		records.addActiveFilter();
-		records.addQuery('assignment_group', taskboard.currentGroups);
+		records.addQuery('assignment_group', groups);
 		records.query();
 
 		while (records.next()) {
@@ -180,8 +180,10 @@
 	}
 
 	tasks = [];
-	loadTasks("incident", tasks, incidentTaskConverter);
-	loadTasks("problem", tasks, baseTaskConverter);
+	groups = getSelectedGroups();
+
+	loadTasks("incident", tasks, groups, incidentTaskConverter);
+	loadTasks("problem", tasks, groups, baseTaskConverter);
 
 	postProcessTasks(tasks);
 	loadColumns(tasks);
@@ -194,5 +196,81 @@
 			taskboard[taskboard.columns.value().key + ":" + taskboard.lanes.value().key].sort(prioritySort);
 		}
 	}
+
+	function getHomePageTitle() {
+		var homePageSysId, records;
+		homePageSysId = RP.getWindowProperties().get('current_page');
+		records = new GlideRecord('sys_portal_page');
+		records.get(homePageSysId);
+		return records.title;
+	}
+
+	function getCurrentGroups() {
+		var groups, iterator, sysId, record;
+
+		groups = [];
+		record = new GlideRecord('sys_user_grmember');
+		record.addQuery('user', gs.getUserID());
+		record.addQuery('group.active', true);
+		record.addQuery('group.hidden', false);
+		record.addQuery('group.name', 'DOES NOT CONTAIN', 'zzz_');
+		record.query();
+
+		while (record.next()) {
+			groups.push({ sys_id: record.group.sys_id, name: record.group.name });
+		}
+		return groups;
+	}
+
+	function getCurrentGroupNames() {
+		var groups, groupNames, group;
+		groupNames = [];
+		groups = getCurrentGroups();
+		for (group in groups) {
+			//noinspection JSUnfilteredForInLoop
+			groupNames.push(groups[group].name);
+		}
+		return groupNames;
+	}
+
+	// FIXME untangle controlling the view
+	function getSelectedGroups() {
+		var currentGroups, selectedGroups, homePageTitle, group;
+
+		currentGroups = getCurrentGroups();
+		if (currentGroups.length == 0) {
+			taskboard.displayTaskBoard = false;
+			taskboard.displayMultiGroupMessage = false;
+			return undefined;
+		}
+		if (currentGroups.length == 1) {
+			taskboard.displayTaskBoard = true;
+			taskboard.displayMultiGroupMessage = false;
+			return [currentGroups[0].sys_id];
+		}
+
+		selectedGroups = [];
+		homePageTitle = getHomePageTitle();
+
+		for (group in currentGroups) {
+			//noinspection JSUnfilteredForInLoop
+			if (homePageTitle.indexOf(currentGroups[group].name) > -1) {
+				//noinspection JSUnfilteredForInLoop
+				selectedGroups.push(currentGroups[group].sys_id);
+			}
+		}
+		if (selectedGroups.length == 0) {
+			taskboard.displayTaskBoard = false;
+			taskboard.displayMultiGroupMessage = true;
+		} else {
+			taskboard.displayTaskBoard = true;
+			taskboard.displayMultiGroupMessage = false;
+		}
+		return selectedGroups;
+	}
+
+	taskboard.getHomePageTitle = getHomePageTitle;
+	taskboard.getCurrentGroupNames = getCurrentGroupNames;
+	taskboard.getSelectedGroups = getSelectedGroups;
 
 }());
